@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+'use strict';
+var path = require('path');
+var argv = process.argv,
+    zn = null;
+var _env = {
+    $bin: argv[0],
+    $path: argv[1],
+    $command: argv[2]
+}, _argv = {};
+
+argv.slice(3).forEach(function (value, index){
+    var _temps = value.split(':'),
+        _value = _temps[1];
+    if(_value===undefined){
+        _value = true;
+    }
+    _argv[_temps[0]] = _value;
+});
+
+if(_argv.zn_path){
+    zn = require(path.resolve(process.cwd(), _argv.zn_path, 'index.js'));
+}else {
+    zn = require('../index.js');
+}
+
+var cli = require('zeanium-cli');
+switch (_env.$command) {
+    case 'info':
+        zn.info(require('../package.json'));
+        break;
+    case 'install':
+        new cli.Install(_env, _argv);
+        break;
+    case 'run':
+    case 'start':
+        var HttpServerLauncher = require('../src/HttpServerLauncher.js');
+        new HttpServerLauncher(_env, _argv);
+        break;
+    default:
+        zn.error('The system can not handler this command.');
+        break;
+}
