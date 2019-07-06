@@ -15,4 +15,4 @@ if(_node_path){
 }
 process.env.NODE_PATH = _curr_node_path + path.delimiter + _parents.join(path.delimiter);
 module.constructor._initPaths();
-module.exports = require('zeanium'), zn.ZN_PATH = __dirname;
+module.exports = require('@zeanium/core'), zn.ZN_PATH = __dirname;

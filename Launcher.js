@@ -3,9 +3,18 @@
  */
 var fs = require('fs'),
     os = require('os'),
-    HttpServer = require('@zeanium/http-server').Server;
+    node_path = require('path'),
+    HttpServer = null;
 
-var middlewares = require('./middleware/index.js');
+try {
+    HttpServer = require('@zeanium/http-server').Server;
+} catch (error) {
+    try {
+        HttpServer = require('zeanium-http-server').Server;
+    } catch (error) {
+        return zn.error('zeanium-http-server is not exist.');
+    }
+}
 
 module.exports = zn.Class({
     properties: {
@@ -28,7 +37,7 @@ module.exports = zn.Class({
             }
         },
         getConfigFilePath: function (){
-            return process.cwd() + zn.SLASH + (this._argv.config || 'zn.server.config.js');
+            return process.cwd() + node_path.sep + (this._argv.config || 'zn.server.config.js');
         },
         getHost: function (){
             var _host = os.platform() === 'darwin'?'127.0.0.1':'0.0.0.0';
@@ -58,9 +67,6 @@ module.exports = zn.Class({
             }
             try {
                 var server =  HttpServer.createServer(config);
-                server.use(middlewares.Controller);
-                server.use(middlewares.Server);
-                server.use(middlewares.ServerContext);
                 server.start();
             } catch (err) {
                 zn.error(err.message);

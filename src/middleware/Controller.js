@@ -1,13 +1,24 @@
-var db_mysql = require('zeanium-database-mysql');
-console.log(db_mysql);
+var dbmysql = require('zeanium-database-mysql');
+var ControllerMixin = require('./Controller.Mixin');
 module.exports = zn.Middleware.Controller({
     methods: {
-        init: function (controller, application){
-            //zn.info(controller);
-        },
-        define: function (name, mate){
-            //zn.info(name, mate);
+        initial: function (controller, application, serverContext){
+            var _databases = serverContext.config.databases,
+                _database = null,
+                _stores = {};
+            for(var key in _databases){
+                _database = _databases[key];
+                _stores[key] = dbmysql.Store.getStore(_database);
+                if(_database.default && !this._store){
+                    controller._store = _stores[key];
+                }
+            }
 
+            controller._stores = _stores;
+        },
+        define: function (name, meta){
+            meta.mixins = [ ControllerMixin ];
+            return meta;
         }
     }
 });
