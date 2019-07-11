@@ -1,4 +1,4 @@
-var dbmysql = require('zeanium-database-mysql');
+var dbmysql = require('@zeanium/database-mysql');
 var ControllerMixin = require('./Controller.Mixin');
 module.exports = zn.Middleware.Controller({
     methods: {
