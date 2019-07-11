@@ -16,6 +16,8 @@ try {
     }
 }
 
+var middlewares = require('./src/middleware');
+
 module.exports = zn.Class({
     properties: {
         env: null,
@@ -67,6 +69,7 @@ module.exports = zn.Class({
             }
             try {
                 var server =  HttpServer.createServer(config);
+                server.uses(middlewares);
                 server.start();
             } catch (err) {
                 zn.error(err.message);
