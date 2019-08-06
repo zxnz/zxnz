@@ -1,44 +1,44 @@
-module.exports = zn.Model({
+module.exports = zn.Class({
     properties: {
-        zn_define_table_importable: {
+        zxnz_table_importable: {
             value: null,
             type: ['tinyint', 1],
             default: true
         },
-        zn_define_table_exportable: {
+        zxnz_table_exportable: {
             value: null,
             type: ['tinyint', 1],
             default: true
         },
-        zn_define_table_inputable: {
+        zxnz_table_inputable: {
             value: null,
             type: ['tinyint', 1],
             default: false
         },
-        zn_define_table_outputable: {
+        zxnz_table_outputable: {
             value: null,
             type: ['tinyint', 1],
             default: false
         },
-        zn_define_table_parent_id: {
+        zxnz_table_parent_id: {
             value: null,
             type: ['int', 11],
             default: 0
         },
-        zn_define_table_name: {
+        zxnz_table_name: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zn_define_table_generated: {
+        zxnz_table_generated: {
             value: null,
             type: ['tinyint', 1],
             default: false
         },
-        zn_define_table_mixins: {
+        zxnz_table_mixins: {
             value: null,
             type: ['varchar', 100],
-            default: 'zn.db.common.model.Base'
+            default: 'zxnz.model.ref.Base'
         }
     }
 });

@@ -12,11 +12,11 @@ try {
     try {
         HttpServer = require('zeanium-http-server').Server;
     } catch (error) {
-        return zn.error('zeanium-http-server is not exist.');
+        return zn.error(error), false;
     }
 }
 
-var middlewares = require('./src/middleware');
+var middlewares = require('./middleware');
 
 module.exports = zn.Class({
     properties: {

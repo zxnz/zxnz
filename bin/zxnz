@@ -31,7 +31,7 @@ switch (_env.$command) {
         break;
     case 'run':
     case 'start':
-        var Launcher = require('../Launcher');
+        var Launcher = require('../src/Launcher');
         new Launcher(_env, _argv);
         break;
     default:

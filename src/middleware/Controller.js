@@ -1,4 +1,17 @@
-var dbmysql = require('@zeanium/database-mysql');
+
+var zndbmysql = null;
+try {
+    zndbmysql = require('@zeanium/database-mysql');
+} catch (error) {
+    try {
+        zndbmysql = require('zeanium-database-mysql');
+    } catch (error) {
+        return zn.error(error), false;
+    }
+}
+
+zn.mysql = zndbmysql.Builder;
+ 
 var ControllerMixin = require('./Controller.Mixin');
 module.exports = zn.Middleware.Controller({
     methods: {
@@ -8,7 +21,7 @@ module.exports = zn.Middleware.Controller({
                 _stores = {};
             for(var key in _databases){
                 _database = _databases[key];
-                _stores[key] = dbmysql.Store.getStore(_database);
+                _stores[key] = zndbmysql.Store.getStore(_database);
                 if(_database.default && !this._store){
                     controller._store = _stores[key];
                 }

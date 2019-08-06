@@ -253,11 +253,11 @@ var Model = zn.Class({
 zn.Model = function (){
     var _args = arguments;
     if(_args.length == 1){
-        return zn.Class(_args[0]);
+        return zn.Class(Model, _args[0]);
     }
     if(_args.length == 2){
         _args[1].table = _args[0];
-        return zn.Class(_args[1]);
+        return zn.Class(Model, _args[1]);
     }
 }
 

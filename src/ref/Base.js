@@ -1,63 +1,51 @@
-module.exports = zn.Model({
+module.exports = zn.Class({
     properties: {
-        id: {
+        zxnz_id: {
             value: null,
             type: ['bigint', 20],
             ignore: true,
             primary: true
         },
-        zn_id: {
+        zxnz_uuid: {
             value: null,
             type: ['char', 36],
-            default: 0,
-            get: function (){
-                return zn.uuid();
-            }
+            default: ''
         },
-        zn_title: {
+        zxnz_label: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zn_create_time: {
+        zxnz_insert_time: {
             value: null,
             type: ['timestamp'],
             ignore: true,
             format: "date_format({},'%Y-%c-%d %h:%i:%s')",
             default: 'now()'
         },
-        zn_create_user: {
-            value: null,
-            type: ['int', 11],
-            convert: 'zn_plugin_admin_convert_user({})',
-            //hidden: true,
-            default: 0
-        },
-        zn_modify_time: {
+        zxnz_update_time: {
             value: null,
             type: ['datetime'],
-            ignore: true,
-            auto_update: '{{now()}}',
-            format: "date_format({},'%Y-%c-%d %h:%i:%s')",
-            //hidden: true,
             default: null
         },
-        zn_modify_user: {
+        zxnz_delete_time: {
             value: null,
-            type: ['int', 11],
-            convert: 'zn_plugin_admin_convert_user({})',
-            ignore: true,
-            //hidden: true,
-            default: 0
+            type: ['datetime'],
+            default: null
         },
-        zn_deleted: {
+        zxnz_select_time: {
             value: null,
-            type: ['int', 4],
+            type: ['datetime'],
+            default: null
+        },
+        zxnz_deleted: {
+            value: null,
+            type: ['tinyint', 4],
             ignore: true,
             hidden: true,
             default: 0
         },
-        zn_note: {
+        zxnz_note: {
             value: null,
             type: ['varchar', 250],
             default: ''
