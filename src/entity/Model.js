@@ -2,20 +2,93 @@
  * Created by yangyxu on 9/17/14.
  */
 
+ var __ = {
+    __getPropertyCreateSql: function (property, context){
+        var _key = property.name,
+            _type = property.type || [],
+            _t1 = _type[0],
+            _t2 = _type[1],
+            _keys = [_key];
+
+        if(Object.prototype.toString.call(_t2) == '[object Array]'){
+            _t2 = _t2.join(',');
+        }
+
+        _keys.push(_t1+(_t2?'('+_t2+')':''));
+
+        if(property.primary){
+            property.notNull = true;
+            _keys.push("PRIMARY KEY");
+        }
+        var _isnull = property.notNull?'NOT NULL':'';
+
+        if(_isnull){
+            _keys.push(_isnull);
+        }
+
+        var _default = this.__getPropertyDefaultValue(property, context);
+
+        if(_default){
+            _keys.push(_default);
+        }
+        var _autoIncrement = property.primary?'AUTO_INCREMENT':'';
+
+        if(_autoIncrement){
+            _keys.push(_autoIncrement);
+        }
+
+        return _keys.join(' ');
+    },
+    __getPropertyDefaultValue: function (property, context) {
+        if(property.default !== undefined){
+            var _value = property.default;
+            if(zn.is(_value, 'function')){
+                _value = _value.call(context, property, property.name);
+            }
+
+            switch(property.type[0].toLowerCase()){
+                case 'nvarchar':
+                case 'varchar':
+                case 'longtext':
+                case 'char':
+                    _value = _value || '';
+                    if(zn.is(_value, 'string')){
+                        if(_value.indexOf('{') === 0 && _value.indexOf('}') === (_value.length-1)){
+                            _value = _value.substring(1, _value.length-1);
+                        }else {
+                            _value = "'" + _value + "'";
+                        }
+                    }
+                    break;
+                case 'date':
+
+                    break;
+                case 'int':
+                    _value = _value==null?0:_value;
+                    break;
+            }
+
+            return 'DEFAULT '+_value;
+        }
+    }
+};
+
 var Model = zn.Class({
-    partial: true,
+    mixins: [
+        //require('./ModelSql')
+    ],
     statics: {
         getTable: function (){
             return this.getMeta('table');
         },
-        getCreateSql: function (){
+        getCreateModelSql: function (){
             var _fields = [];
             this.getProperties(function (prop, key){
                 if(!prop.type){
                     return -1;
                 }
                 prop.name = key;
-                var _sql = this.__getPropertyCreateSql(prop);
+                var _sql = __.__getPropertyCreateSql(prop, this);
                 if(prop.primary){
                     _fields.unshift(_sql);
                 }else {
@@ -25,7 +98,7 @@ var Model = zn.Class({
                 return -1;
             }, this);
 
-            return zn.sql.schema.TABLE.CREATE.format({
+            return zxnz.sql.SCHEMA.TABLE.CREATE.format({
                 table: this.getTable(),
                 fields: _fields.join(',')
             });
@@ -87,7 +160,7 @@ var Model = zn.Class({
 
             return _updates;
         },
-        getSelectFields: function (inFields, hidden){
+        getFields: function (inFields, hidden){
             var _props = this.getProperties(),
                 _hidden = hidden || [];
             var fields = inFields||Object.keys(_props);
@@ -140,112 +213,54 @@ var Model = zn.Class({
             return _fields.join(',');
         },
         getInsertSql: function (argv){
-            argv.table = this.getMeta('table');
-            argv.values = this.getValues(argv.values);
-            return zn.sql.insert(argv);
+            return zxnz.sql.insert(zn.overwrite(argv, {
+                table : this.getTable(),
+                values: this.getValues(argv.values)
+            }));
         },
         getSelectSql: function (argv){
-            argv.table = this.getMeta('table');
+            argv = zn.overwrite(argv, {
+                table : this.getTable()
+            });
+            
             if(typeof argv.fields == 'string' && argv.fields.indexOf(' as ')!=-1){
                 //console.log(argv.fields);
             }else {
-                argv.fields = this.getSelectFields(argv.fields, argv.hidden);
+                argv.fields = this.getFields(argv.fields, argv.hidden);
             }
 
-            return zn.sql.select(argv);
+            return zxnz.sql.select(argv);
         },
         getDeleteSql: function (argv){
-            argv.table = this.getMeta('table');
-            return zn.sql.delete(argv);
+            return zxnz.sql.delete(zn.overwrite(argv, {
+                table : this.getTable()
+            }));
         },
         getUpdateSql: function (argv){
-            argv.table = this.getMeta('table');
-            argv.updates = this.getUpdates(argv.updates);
-            return zn.sql.update(argv);
+            return zxnz.sql.update(zn.overwrite(argv, {
+                table : this.getTable(),
+                updates: this.getUpdates(argv.updates)
+            }));
         },
         getPagingSql: function (argv){
-            argv.table = this.getMeta('table');
-            argv.fields = this.getSelectFields(argv.fields);
-            return zn.sql.paging(argv);
-        },
-        __getPropertyCreateSql: function (property){
-            var _key = property.name,
-                _type = property.type || [],
-                _t1 = _type[0],
-                _t2 = _type[1],
-                _keys = [_key];
-
-            if(Object.prototype.toString.call(_t2) == '[object Array]'){
-                _t2 = _t2.join(',');
-            }
-
-            _keys.push(_t1+(_t2?'('+_t2+')':''));
-
-            if(property.primary){
-                property.notNull = true;
-                _keys.push("PRIMARY KEY");
-            }
-            var _isnull = property.notNull?'NOT NULL':'';
-
-            if(_isnull){
-                _keys.push(_isnull);
-            }
-
-            var _default = this.__getPropertyDefaultValue(property);
-
-            if(_default){
-                _keys.push(_default);
-            }
-            var _autoIncrement = property.primary?'AUTO_INCREMENT':'';
-
-            if(_autoIncrement){
-                _keys.push(_autoIncrement);
-            }
-
-            return _keys.join(' ');
-        },
-        __getPropertyDefaultValue: function (property) {
-            if(property.default !== undefined){
-                var _value = property.default;
-                if(zn.is(_value, 'function')){
-                    _value = _value.call(this, property, property.name);
-                }
-
-                switch(property.type[0].toLowerCase()){
-                    case 'nvarchar':
-                    case 'varchar':
-                    case 'longtext':
-                    case 'char':
-                        _value = _value || '';
-                        if(zn.is(_value, 'string')){
-                            if(_value.indexOf('{') === 0 && _value.indexOf('}') === (_value.length-1)){
-                                _value = _value.substring(1, _value.length-1);
-                            }else {
-                                _value = "'" + _value + "'";
-                            }
-                        }
-                        break;
-                    case 'date':
-
-                        break;
-                    case 'int':
-                        _value = _value==null?0:_value;
-                        break;
-                }
-
-                return 'DEFAULT '+_value;
-            }
-
+            return zxnz.sql.paging(zn.overwrite(argv, {
+                table : this.getTable(),
+                fields: this.getFields(argv.fields)
+            }));
         }
     },
     methods: {
         init: {
             auto: true,
             value: function (args){
-                this._table = this.constructor.getTable();
-                this._props = this.constructor.getProperties();
                 this.sets(args);
             }
+        },
+        getTable: function (){
+            return this.constructor.getTable();
+        },
+        getProperties: function (){
+            return this.constructor.getProperties();
         }
     }
 });

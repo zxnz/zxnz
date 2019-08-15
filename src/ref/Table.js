@@ -38,7 +38,7 @@ module.exports = zn.Class({
         zxnz_table_mixins: {
             value: null,
             type: ['varchar', 100],
-            default: 'zxnz.model.ref.Base'
+            default: 'zxnz.ref.Base'
         }
     }
 });

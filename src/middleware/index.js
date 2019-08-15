@@ -1,3 +1,4 @@
 module.exports = {
-    Controller: require('./Controller.js')
-}
+    Application: require('./Application'),
+    Server: require('./Server')
+};

@@ -1,6 +1,6 @@
 module.exports = zn.Class({
     properties: {
-        zxnz_table_field: {
+        zxnz_table_field_Name: {
             value: null,
             type: ['varchar', 100],
             default: ''

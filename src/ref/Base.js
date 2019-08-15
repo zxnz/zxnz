@@ -16,24 +16,19 @@ module.exports = zn.Class({
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_insert_time: {
+        zxnz_inserted_time: {
             value: null,
             type: ['timestamp'],
             ignore: true,
             format: "date_format({},'%Y-%c-%d %h:%i:%s')",
             default: 'now()'
         },
-        zxnz_update_time: {
+        zxnz_updated_time: {
             value: null,
             type: ['datetime'],
             default: null
         },
-        zxnz_delete_time: {
-            value: null,
-            type: ['datetime'],
-            default: null
-        },
-        zxnz_select_time: {
+        zxnz_deleted_time: {
             value: null,
             type: ['datetime'],
             default: null
@@ -44,6 +39,11 @@ module.exports = zn.Class({
             ignore: true,
             hidden: true,
             default: 0
+        },
+        zxnz_selected_time: {
+            value: null,
+            type: ['datetime'],
+            default: null
         },
         zxnz_note: {
             value: null,

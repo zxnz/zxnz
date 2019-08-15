@@ -20,9 +20,9 @@ argv.slice(3).forEach(function (value, index){
 });
 
 if(_argv.zn_path){
-    zn = require(path.resolve(process.cwd(), _argv.zn_path, 'index.js'));
+    zn = require(path.resolve(process.cwd(), _argv.zn_path));
 }else {
-    zn = require('../index.js');
+    zn = require('@zeanium/core');
 }
 
 switch (_env.$command) {
@@ -31,8 +31,7 @@ switch (_env.$command) {
         break;
     case 'run':
     case 'start':
-        var Launcher = require('../src/Launcher');
-        new Launcher(_env, _argv);
+        require('../Launcher').start(_env, _argv);
         break;
     default:
         zn.error('The system can not handler this command.');

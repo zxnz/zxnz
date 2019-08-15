@@ -1,24 +1,17 @@
 /**
  * Created by yangyxu on 7/14/15.
  */
+require('./index');
 var fs = require('fs'),
     os = require('os'),
-    node_path = require('path'),
-    HttpServer = null;
-
-try {
-    HttpServer = require('@zeanium/http-server').Server;
-} catch (error) {
-    try {
-        HttpServer = require('zeanium-http-server').Server;
-    } catch (error) {
-        return zn.error(error), false;
-    }
-}
-
-var middlewares = require('./middleware');
+    node_path = require('path');
 
 module.exports = zn.Class({
+    statics: {
+        start: function (env, argv) {
+            return new this(env, argv);
+        }
+    },
     properties: {
         env: null,
         argv: null
@@ -67,9 +60,15 @@ module.exports = zn.Class({
                     zn.info('Exit code: ', code);
                 });
             }
+
             try {
-                var server =  HttpServer.createServer(config);
-                server.uses(middlewares);
+                if(config.node_paths){
+                    zxnz.resolve(config.node_paths, config.includeParentPath);
+                }
+                
+                zxnz.http = zxnz.require('@zeanium/http-server', 'zeanium-http-server');
+                var server = zxnz.http.Server.createServer(config);
+                server.uses(require('./src/middleware/index.js'));
                 server.start();
             } catch (err) {
                 zn.error(err.message);

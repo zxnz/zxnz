@@ -1,6 +1,6 @@
 {
   "name": "zxnz",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Zxnz is simple http server and custome your business.",
   "main": "index.js",
   "scripts": {
@@ -27,8 +27,8 @@
   "license": "MIT",
   "dependencies": {
     "@zeanium/core": "^1.0.5",
-    "@zeanium/database-mysql": "^1.0.3",
-    "@zeanium/http-server": "^1.1.0",
+    "@zeanium/database-mysql": "^1.0.4",
+    "@zeanium/http-server": "^1.1.2",
     "jsonwebtoken": "^8.5.1"
   },
   "preferGlobal": true,
