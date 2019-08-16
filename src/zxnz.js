@@ -58,7 +58,6 @@ var __ = {
 var zxnz = {
     app: {},
     plugin: {},
-    module: {},
     store: {},
     require: function (){
         var _argv = __slice.call(arguments);

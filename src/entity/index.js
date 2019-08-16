@@ -1,4 +1,5 @@
 module.exports = {
     Collection: require('./Collection'),
-    Model: require('./Model')
+    Model: require('./Model'),
+    Store: require('./Store')
 }
