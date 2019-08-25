@@ -1,21 +1,34 @@
 var node_path = require('path'),
     __slice = Array.prototype.slice;
-
 var __ = {
     getProcessArgvNodePaths: function (){
-        var _node_paths = [];
+        var _paths = {
+                zn_path: [],
+                node_path: []
+            },
+            _path = null;
         process.argv.forEach(function (_argument){
-            _argument = _argument.toString();
+            _argument = _argument.toString().trim();
+            if(_argument.indexOf(':') == -1){
+                return;
+            }
+
+            _path = (_argument.split(':')[1]).trim();
+            if(_argument.indexOf('zn_path:') == 0){
+                _paths['zn_path'].push(_path);
+            }
+
             if(_argument.indexOf('node_path:') == 0){
-                _node_paths.push(_argument.split(':')[1]);
+                _paths['node_path'].push(_path);
             }
 
             if(_argument.indexOf('node_paths:') == 0){
-                _node_paths.concat(_argument.split(':')[1].split(','));
+                _path = _path.split(',');
+                _paths['node_path'].concat(_path);
             }
         });
 
-        return _node_paths;
+        return _paths;
     },
     resolve: function (paths, includeParentPath){
         if(typeof paths == 'string'){
@@ -57,14 +70,14 @@ var __ = {
 
 var zxnz = {
     app: {},
-    plugin: {},
     store: {},
+    plugin: {},
+    module: {},
     require: function (){
         var _argv = __slice.call(arguments);
         if(_argv.length == 1 && zn.is(_argv[0], 'array')){
             _argv = _argv[0];
         }
-        
         var _value = _argv.shift();
         if(_value){
             try {
@@ -73,7 +86,6 @@ var zxnz = {
                 if(_argv.length){
                     return arguments.callee.apply(null, _argv);
                 }else{
-                    zn.error(err);
                     throw err;
                 }
             }
@@ -86,10 +98,15 @@ var zxnz = {
     }
 }
 
-__.resolve(__.getProcessArgvNodePaths(), true)
+var _path = __.getProcessArgvNodePaths();
+__.resolve(_path.node_path, true);
 
 if(!zn){
-    zxnz.require('@zeanium/core', 'zeanium');
+    if(_path.zn_path.length){
+        zxnz.require.apply(zxnz, _path.zn_path);
+    }else{
+        zxnz.require('@zeanium/core', 'zeanium');
+    }
 }
 
 module.exports = zn.GLOBAL.zxnz = zxnz;

@@ -65,7 +65,6 @@ module.exports = zn.Class({
                 if(config.node_paths){
                     zxnz.resolve(config.node_paths, config.includeParentPath);
                 }
-                
                 zxnz.http = zxnz.require('@zeanium/http-server', 'zeanium-http-server');
                 var server = zxnz.http.Server.createServer(config);
                 server.uses(require('./src/middleware/index.js'));
