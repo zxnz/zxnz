@@ -58,7 +58,7 @@ module.exports = zn.Controller('__zxnz__', {
         initData: {
             method: 'GET/POST',
             value: function (request, response, application, context, router){
-                var _basePath = application._APP_PATH,
+                var _basePath = application.config.root,
                     _dataPath = node_path.join(_basePath, 'src', 'data'),
                     _self = this;
                 if(node_fs.existsSync(_dataPath)){
@@ -103,7 +103,7 @@ module.exports = zn.Controller('__zxnz__', {
         initFunction: {
             method: 'GET/POST',
             value: function (request, response, application, context, router){
-                var _basePath = application._APP_PATH,
+                var _basePath = application.config.root,
                     _dataPath = node_path.join(_basePath, 'src', 'function'),
                     _self = this;
                 if(node_fs.existsSync(_dataPath)){
