@@ -265,7 +265,7 @@ var Model = zn.Class({
     }
 });
 
-zn.Model = function (){
+zxnz.Model = function (){
     var _args = arguments;
     if(_args.length == 1){
         return zn.Class(Model, _args[0]);

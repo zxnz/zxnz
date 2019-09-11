@@ -64,7 +64,7 @@ var Collection = zn.Class({
     }
 });
 
-zn.Collection = function (){
+zxnz.Collection = function (){
     var _args = arguments,
         _meta = _args[0];
 

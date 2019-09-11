@@ -2,7 +2,7 @@
  * Created by yangyxu on 9/17/14.
  */
 var Block = require('./TreeBlock');
-module.exports = zn.Collection({
+module.exports = zxnz.Collection({
     methods: {
         init: function (){
             this._block = new Block();
