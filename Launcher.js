@@ -14,7 +14,8 @@ module.exports = zn.Class({
     },
     properties: {
         env: null,
-        argv: null
+        argv: null,
+        server: null
     },
     methods: {
         init: function (env, argv){
@@ -66,9 +67,9 @@ module.exports = zn.Class({
                     zxnz.resolve(config.node_paths, config.includeParentPath);
                 }
                 zxnz.http = zxnz.require('@zeanium/http-server', 'zeanium-http-server');
-                var server = zxnz.http.Server.createServer(config);
-                server.uses(require('./src/middleware/index.js'));
-                server.start();
+                this._server = zxnz.http.Server.createServer(config);
+                this._server.uses(require('./src/middleware/index.js'));
+                this._server.start();
             } catch (err) {
                 zn.error(err.message);
                 zn.error(err);
