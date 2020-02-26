@@ -32,7 +32,7 @@ module.exports = zn.Class({
             }
         },
         getConfigFilePath: function (){
-            return process.cwd() + node_path.sep + (this._argv.config || 'zn.server.config.js');
+            return node_path.resolve(process.cwd(), (this._argv.config || 'zn.server.config.js'));
         },
         getHost: function (){
             var _host = os.platform() === 'darwin'?'127.0.0.1':'0.0.0.0';

@@ -1,5 +1,7 @@
 .idea/*
 .DS_Store
 .git
+.gitignore
+.npmignore
 node_modules/*
 package-lock.json
