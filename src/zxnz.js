@@ -101,7 +101,7 @@ var zxnz = {
 var _path = __.getProcessArgvNodePaths();
 __.resolve(_path.node_path, true);
 
-if(!zn){
+if(!global.zn){
     if(_path.zn_path.length){
         zxnz.require.apply(zxnz, _path.zn_path);
     }else{
@@ -109,4 +109,4 @@ if(!zn){
     }
 }
 
-module.exports = zn.GLOBAL.zxnz = zxnz;
+module.exports = global.zxnz = zxnz;

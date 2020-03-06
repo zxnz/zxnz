@@ -1,6 +1,6 @@
 {
   "name": "zxnz",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Zxnz is simple http server and custome your business.",
   "main": "index.js",
   "repository": {
@@ -23,9 +23,9 @@
   "email": "xuyy0618@qq.com",
   "license": "MIT",
   "dependencies": {
-    "@zeanium/core": "^1.0.8",
-    "@zeanium/database-mysql": "^1.0.6",
-    "@zeanium/http-server": "^1.2.3",
+    "@zeanium/core": "latest",
+    "@zeanium/database-mysql": "latest",
+    "@zeanium/http-server": "latest",
     "jsonwebtoken": "^8.5.1"
   }
 }

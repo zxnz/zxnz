@@ -27,7 +27,7 @@ module.exports = zn.Class({
             var _configFilePath = this.getConfigFilePath(),
                 _config = this._argv;
             if(fs.existsSync(_configFilePath)){
-                this.createHttpServer(zn.overwrite(require(_configFilePath), _config));
+                this.createHttpServer(zn.deepAssign(require(_configFilePath), _config));
             }else {
                 this.createHttpServer(_config);
             }
@@ -66,12 +66,16 @@ module.exports = zn.Class({
                 if(config.node_paths){
                     zxnz.resolve(config.node_paths, config.includeParentPath);
                 }
-                zxnz.http = zxnz.require('@zeanium/http-server', 'zeanium-http-server');
+
+                if(config.server_path){
+                    zxnz.http = zxnz.require(node_path.resolve(config.server_path, 'zeanium-http-server'), node_path.resolve(config.server_path, '@zeanium/http-server'));
+                }else{
+                    zxnz.http = zxnz.require('@zeanium/http-server', 'zeanium-http-server');
+                }
                 this._server = zxnz.http.Server.createServer(config);
                 this._server.uses(require('./src/middleware/index.js'));
                 this._server.start();
             } catch (err) {
-                zn.error(err.message);
                 zn.error(err);
             }
         }
