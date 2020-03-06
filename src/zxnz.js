@@ -1,34 +1,56 @@
 var node_path = require('path'),
+    node_fs = require('fs'),
     __slice = Array.prototype.slice;
+
 var __ = {
-    getProcessArgvNodePaths: function (){
-        var _paths = {
-                zn_path: [],
-                node_path: []
-            },
-            _path = null;
-        process.argv.forEach(function (_argument){
-            _argument = _argument.toString().trim();
-            if(_argument.indexOf(':') == -1){
-                return;
+    __parseArgv__: function (argv){
+        var _env = [],
+            _keys = {},
+            _key = '',
+            _value = null,
+            _counter = {},
+            _started = false;
+        for(var i = 0, _len = argv.length; i < _len; i++){
+            _value = argv[i];
+            if(_value.indexOf('--') !== -1){
+                _key = _value.replace('--', '');
+                _keys[_key] = true;
+                _counter[i+1] = _key;
+                if(!_started) {
+                    _started = true;
+                }
+            }else{
+                if(_started){
+                    if(_counter[i]) {
+                        _keys[_counter[i]] = _value;
+                    }else{
+                        var _i = i - 1;
+                        while (!_counter[_i] && _i > 0) {
+                            _i = _i - 1;
+                        }
+                        if(_counter[_i]){
+                            var _keyValue = _keys[_counter[_i]];
+                            if(_keyValue != null){
+                                if(typeof _keyValue === 'string'){
+                                    _keys[_counter[_i]] = [_keyValue, _value];
+                                } else if(typeof _keyValue === 'object'){
+                                    _keys[_counter[_i]].push(_value);
+                                }
+                            }else {
+                                _keys[_counter[_i]] = _value;
+                            }
+                        }
+                    }
+                }else {
+                    _env.push(_value);
+                }
             }
+        }
 
-            _path = (_argument.split(':')[1]).trim();
-            if(_argument.indexOf('zn_path:') == 0){
-                _paths['zn_path'].push(_path);
-            }
-
-            if(_argument.indexOf('node_path:') == 0){
-                _paths['node_path'].push(_path);
-            }
-
-            if(_argument.indexOf('node_paths:') == 0){
-                _path = _path.split(',');
-                _paths['node_path'].concat(_path);
-            }
-        });
-
-        return _paths;
+        return {
+            env: _env,
+            argv: _keys
+        };
     },
     resolve: function (paths, includeParentPath){
         if(typeof paths == 'string'){
@@ -98,12 +120,15 @@ var zxnz = {
     }
 }
 
-var _path = __.getProcessArgvNodePaths();
-__.resolve(_path.node_path, true);
+var _argv = __.__parseArgv__(process.argv).argv;
+
+if(_argv.node_path) {
+    __.resolve(_argv.node_path, true);
+}
 
 if(!global.zn){
-    if(_path.zn_path.length){
-        zxnz.require.apply(zxnz, _path.zn_path);
+    if(_argv.zn_path){
+        zxnz.require(_argv.zn_path);
     }else{
         zxnz.require('@zeanium/core', 'zeanium');
     }
