@@ -1,4 +1,5 @@
 module.exports = {
     Application: require('./Application'),
-    Server: require('./Server')
+    Server: require('./Server'),
+    ServerContext: require('./ServerContext')
 };

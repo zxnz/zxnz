@@ -31,10 +31,15 @@ module.exports = zn.Class({
             type: ['tinyint', 1],
             default: false
         },
-        zxnz_table_field_column_width: {
+        zxnz_table_field_column_meta: {
             value: null,
-            type: ['int', 11],
-            default: null
+            type: ['varchar', 500],
+            default: '{}'
+        },
+        zxnz_table_field_form_meta: {
+            value: null,
+            type: ['varchar', 500],
+            default: '{}'
         }
     }
 });

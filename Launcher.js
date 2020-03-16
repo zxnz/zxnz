@@ -21,11 +21,11 @@ module.exports = zn.Class({
         init: function (env, argv){
             this._env = env;
             this._argv = argv;
-            this.start();
+            this.start(argv);
         },
-        start: function (){
+        start: function (argv){
             var _configFilePath = this.getConfigFilePath(),
-                _config = this._argv;
+                _config = argv || this._argv;
             if(fs.existsSync(_configFilePath)){
                 this.createHttpServer(zn.deepAssign(require(_configFilePath), _config));
             }else {
