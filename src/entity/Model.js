@@ -79,7 +79,7 @@ var Model = zn.Class({
     ],
     statics: {
         getTable: function (){
-            return this.getMeta('table');
+            return this.getMeta('tablePrefix') + this.getMeta('table');
         },
         getCreateModelSql: function (){
             var _fields = [];

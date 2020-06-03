@@ -9,7 +9,10 @@ module.exports = zn.Middleware.ServerContext({
                 browser: 'google chrome'
             }, contenxt._config.open);
             if(process.env.NODE_ENV == 'development') {
-                zn.debug('Routers: ', Object.keys(contenxt.routers));
+                zn.debug('routes( ' + contenxt.routes.length + ' ): ')
+                contenxt.routes.forEach(function (route){
+                    zn.debug('route: ',  route.path);
+                });
                 if((this._openChildProcess && !this._openChildProcess.killed)) {
                     return false;
                 }

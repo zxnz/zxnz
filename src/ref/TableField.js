@@ -1,45 +1,53 @@
-var Form = require('./TableFieldForm');
-var Structure = require('./TableFieldStructure');
 module.exports = zn.Class({
     mixins: [
-        Form,
-        Structure
+        require('./TableFK'),
+        require('./TableFieldStructure')
     ],
     properties: {
-        zxnz_table_id: {
+        zxnz_table_field_Order: {
             value: null,
             type: ['int', 11],
             default: 0
         },
-        zxnz_table_field_order: {
+        zxnz_table_field_Generated: {
             value: null,
-            type: ['int', 11],
-            default: 0
+            type: ['tinyint', 1],
+            default: false
         },
-        zxnz_table_field_convert: {
+        zxnz_table_field_Label: {
             value: null,
-            type: ['varchar', 50],
+            type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_field_hidden: {
+        zxnz_table_field_Convert: {
+            value: null,
+            type: ['varchar', 100],
+            default: ''
+        },
+        zxnz_table_field_Hidden: {
             value: null,
             type: ['tinyint', 1],
             default: false
         },
-        zxnz_table_field_repeat_verify: {
+        zxnz_table_field_Repeat_Verify: {
             value: null,
             type: ['tinyint', 1],
             default: false
         },
-        zxnz_table_field_column_meta: {
+        zxnz_table_field_Input_Meta: {
             value: null,
             type: ['varchar', 500],
-            default: '{}'
+            default: ''
         },
-        zxnz_table_field_form_meta: {
+        zxnz_table_field_Column_Meta: {
             value: null,
             type: ['varchar', 500],
-            default: '{}'
+            default: ''
+        },
+        zxnz_table_field_Form_Meta: {
+            value: null,
+            type: ['varchar', 500],
+            default: ''
         }
     }
 });

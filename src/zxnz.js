@@ -89,7 +89,6 @@ var __ = {
     }
 }
 
-
 var zxnz = {
     app: {},
     store: {},
@@ -120,17 +119,33 @@ var zxnz = {
     }
 }
 
-var _argv = __.__parseArgv__(process.argv).argv;
+var _argv = __.__parseArgv__(process.argv).argv,
+    _config = {};
+if(node_fs.existsSync(node_path.resolve(process.cwd(), _argv.config || './zn.server.config.js'))) {
+    _config = require(node_path.resolve(process.cwd(), _argv.config || './zn.server.config.js'));
+}
+
+if(_argv.mode){
+    process.env.NODE_ENV = _argv.mode;
+}else{
+    process.env.NODE_ENV = "production";
+}
 
 if(_argv.node_path) {
     __.resolve(_argv.node_path, true);
 }
 
+if(_config.node_path) {
+    __.resolve(_config.node_path, true);
+}
+
 if(!global.zn){
     if(_argv.zn_path){
         zxnz.require(_argv.zn_path);
-    }else{
-        zxnz.require('@zeanium/core', 'zeanium');
+    }else if(_config.zn_path){
+        zxnz.require(_config.zn_path);
+    }else {
+        zxnz.require('zeanium', '@zeanium/core');
     }
 }
 
