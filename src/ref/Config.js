@@ -1,50 +1,46 @@
 module.exports = zn.Class({
-    mixins: [
-        require('./TableFK'),
-        require('./TableFieldStructure')
-    ],
     properties: {
-        zxnz_table_Field_Order: {
+        zxnz_config_Namespace: {
             value: null,
-            type: ['int', 11],
-            default: 0
+            type: ['varchar', 50],
+            default: ''
         },
-        zxnz_table_Field_Generated: {
+        zxnz_config_Namespaces: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['varchar', 200],
+            default: ''
         },
-        zxnz_table_Field_Label: {
+        zxnz_config_Label: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_Field_Convert: {
+        zxnz_config_Name: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_Field_Hidden: {
+        zxnz_config_Value: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['varchar', 100],
+            default: ''
         },
-        zxnz_table_Field_Repeat_Verify: {
+        zxnz_config_Text: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['varchar', 100],
+            default: ''
         },
-        zxnz_table_Field_Input_Meta: {
+        zxnz_config_Input_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_table_Field_Column_Meta: {
+        zxnz_config_Form_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_table_Field_Form_Meta: {
+        zxnz_config_Column_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''

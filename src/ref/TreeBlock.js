@@ -4,42 +4,42 @@
 module.exports = zn.Class({
     methods: {
         addNode: function (table, model){
-            var _pid = model.zxnz_tree_pid || 0;
+            var _pid = model.zxnz_tree_Pid || 0;
             return zxnz.db.mysql.createTransactionBlock()
                 .query(zxnz.sql.mysql.select({
                     table: table,
-                    fields: 'zxnz_id, zxnz_tree_depth, zxnz_tree_parent_path, zxnz_tree_order',
+                    fields: 'zxnz_ID, zxnz_tree_Depth, zxnz_tree_Parent_Path, zxnz_tree_Order',
                     where: {
-                        zxnz_id: _pid
+                        zxnz_ID: _pid
                     }
                 }, {
                     table: table,
-                    fields: 'max(zxnz_tree_order)+1 as zxnz_tree_order',
+                    fields: 'max(zxnz_tree_Order)+1 as zxnz_tree_Order',
                     where: {
-                        zxnz_deleted: 0,
-                        zxnz_tree_pid: _pid
+                        zxnz_Deleted: 0,
+                        zxnz_tree_Pid: _pid
                     }
                 }))
                 .query('Insert node && Update parent node', function (sql, rows, fields){
                     var _pidModel = rows[0][0],
-                        _treeOrder = rows[1][0].zxnz_tree_order|| 1,
-                        _pid = _pidModel ? _pidModel.zxnz_id: 0,
-                        _depth = (_pidModel?_pidModel.zxnz_tree_depth:0) + 1,
-                        _parentPath = (_pidModel?_pidModel.zxnz_tree_parent_path:'') + (_pid === 0 ? '' : _pid) + ',';
+                        _treeOrder = rows[1][0].zxnz_tree_Order|| 1,
+                        _pid = _pidModel ? _pidModel.zxnz_ID: 0,
+                        _depth = (_pidModel?_pidModel.zxnz_tree_Depth:0) + 1,
+                        _parentPath = (_pidModel?_pidModel.zxnz_tree_Parent_Path:'') + (_pid === 0 ? '' : _pid) + ',';
                     if(typeof model == 'string'){
                         model = JSON.parse(model);
                     }
-                    model.zxnz_tree_parent_path = _parentPath;
-                    model.zxnz_tree_order = _treeOrder;
-                    model.zxnz_tree_depth = _depth;
+                    model.zxnz_tree_Parent_Path = _parentPath;
+                    model.zxnz_tree_Order = _treeOrder;
+                    model.zxnz_tree_Depth = _depth;
                     return zxnz.sql.mysql.insert({
                         table: table,
                         values: model
                     }) + zxnz.sql.mysql.update({
                         table: table,
-                        updates: 'zxnz_tree_son_count=zxnz_tree_son_count+1',
+                        updates: 'zxnz_tree_Son_Count=zxnz_tree_Son_Count+1',
                         where: {
-                            zxnz_id: _pid
+                            zxnz_ID: _pid
                         }
                     });
                 });
@@ -48,20 +48,20 @@ module.exports = zn.Class({
             return zxnz.db.mysql.createTransactionBlock()
                 .query(zn.sql.select({
                     table: table,
-                    fields: 'zxnz_id, zxnz_tree_pid, zxnz_tree_order',
+                    fields: 'zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order',
                     where: where
                 }))
                 .query('delete', function (sql, rows, fields, tran){
                     var _model = rows[0];
                     if(_model){
-                        var _sql = 'delete from {0} where zxnz_id={1};'.format(table, _model.zxnz_id),
-                            _pid = +_model.zxnz_tree_pid;
+                        var _sql = 'delete from {0} where zxnz_ID={1};'.format(table, _model.zxnz_ID),
+                            _pid = +_model.zxnz_tree_Pid;
 
                         if(_pid){
-                            _sql += 'update {0} set zxnz_tree_son_count=zxnz_tree_son_count-1 where zxnz_id={1};'.format(table, _pid);
+                            _sql += 'update {0} set zxnz_tree_Son_Count=zxnz_tree_Son_Count-1 where zxnz_ID={1};'.format(table, _pid);
                         }
-                        _sql += 'update {0} set zxnz_tree_order=zxnz_tree_order-1 where zxnz_tree_order>{1} and zxnz_tree_pid={2};'.format(table, _model.zxnz_tree_order, _pid);
-                        _sql += "delete from {0} where locate(',{1},', zxnz_tree_parent_path)<>0;".format(table, _model.zxnz_id);
+                        _sql += 'update {0} set zxnz_tree_Order=zxnz_tree_Order-1 where zxnz_tree_Order>{1} and zxnz_tree_Pid={2};'.format(table, _model.zxnz_tree_Order, _pid);
+                        _sql += "delete from {0} where locate(',{1},', zxnz_tree_Parent_Path)<>0;".format(table, _model.zxnz_ID);
                         return _sql;
                     } else {
                         return this.rollback('The node is not exist!'), false;
@@ -70,13 +70,13 @@ module.exports = zn.Class({
         },
         orderNode: function (table, id, order){
             return zxnz.db.mysql.createTransactionBlock()
-                .query('select {0} from {1} where zxnz_id={2};select count(zxnz_id) as count from {1} where zxnz_tree_pid=(select zxnz_tree_pid from {1} where zxnz_id={2});'.format('zxnz_id, zxnz_tree_pid, zxnz_tree_order', table, id))
+                .query('select {0} from {1} where zxnz_ID={2};select count(zxnz_ID) as count from {1} where zxnz_tree_Pid=(select zxnz_tree_Pid from {1} where zxnz_ID={2});'.format('zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order', table, id))
                 .query('order', function (sql, rows, fields){
                     var _model = rows[0][0],
                         _count = rows[1][0].count;
 
                     if(_model){
-                        var _treeOrder = +_model.zxnz_tree_order,
+                        var _treeOrder = +_model.zxnz_tree_Order,
                             _newOrder = _treeOrder - 1;
 
                         if(order=='down'){
@@ -91,8 +91,8 @@ module.exports = zn.Class({
                             _newOrder = _count;
                         }
 
-                        var _sql = 'update {0} set zxnz_tree_order={1} where zxnz_tree_order={2} and zxnz_tree_pid={3};'.format(table, _treeOrder, _newOrder, _model.zxnz_tree_pid);
-                        _sql += 'update {0} set zxnz_tree_order={1} where zxnz_id={2};'.format(table, _newOrder, _model.zxnz_id);
+                        var _sql = 'update {0} set zxnz_tree_Order={1} where zxnz_tree_Order={2} and zxnz_tree_Pid={3};'.format(table, _treeOrder, _newOrder, _model.zxnz_tree_Pid);
+                        _sql += 'update {0} set zxnz_tree_Order={1} where zxnz_ID={2};'.format(table, _newOrder, _model.zxnz_ID);
                         return _sql;
                     } else {
                         return this.rollback('The node is not exist!'), false;
@@ -100,23 +100,23 @@ module.exports = zn.Class({
                 });
         },
         moveNode: function (table, source, target){
-            var _fields = "zxnz_id, zxnz_tree_pid, zxnz_tree_depth, zxnz_tree_order, zxnz_tree_son_count, zxnz_tree_max_son_count, zxnz_tree_parent_path";
+            var _fields = "zxnz_ID, zxnz_tree_Pid, zxnz_tree_Depth, zxnz_tree_Order, zxnz_tree_Son_Count, zxnz_tree_Max_Son_Count, zxnz_tree_Parent_Path";
             return zxnz.db.mysql.createTransactionBlock()
                 .query(zxnz.sql.mysql.select({
                     table: table,
                     fields: _fields,
-                    where: { zxnz_id: source }
+                    where: { zxnz_ID: source }
                 }) + zxnz.sql.mysql.select({
                     table: table,
                     fields: _fields,
-                    where: { zxnz_id: target }
-                })+"select max(zxnz_tree_order) as target_zn_tree_order from "+table+" where zxnz_tree_pid=" + target)
+                    where: { zxnz_ID: target }
+                })+"select max(zxnz_tree_Order) as target_zn_tree_order from "+table+" where zxnz_tree_Pid=" + target)
                 .query('order', function (sql, rows, fields){
                     var _source = rows[0][0],
                         _target = rows[1][0],
                         _target_zn_tree_order = rows[2][0].target_zn_tree_order;
 
-                    if(_source.zxnz_tree_parent_path == _target.zxnz_tree_parent_path + _source.id + ','){
+                    if(_source.zxnz_tree_Parent_Path == _target.zxnz_tree_Parent_Path + _source.zxnz_ID + ','){
                         return this.rollback('The source has in target node!'), false;
                     }
                     if(!_target || !_source){
@@ -126,45 +126,45 @@ module.exports = zn.Class({
                     var _sqls = [];
                     _sqls.push(zxnz.sql.mysql.update({
                         table: table,
-                        updates: "zxnz_tree_son_count=zxnz_tree_son_count-1",
+                        updates: "zxnz_tree_Son_Count=zxnz_tree_Son_Count-1",
                         where: {
-                            id: _source.zxnz_tree_pid
+                            zxnz_ID: _source.zxnz_tree_Pid
                         }
                     }));
 
                     _sqls.push(zxnz.sql.mysql.update({
                         table: table,
                         updates: {
-                            zxnz_tree_pid: _target.zxnz_id,
-                            zxnz_tree_depth: _target.zxnz_tree_depth + 1,
-                            zxnz_tree_order: _target_zn_tree_order + 1,
-                            zxnz_tree_parent_path: _target.zxnz_tree_parent_path + _target.zxnz_id + ','
+                            zxnz_tree_Pid: _target.zxnz_ID,
+                            zxnz_tree_Depth: _target.zxnz_tree_Depth + 1,
+                            zxnz_tree_Order: _target_zn_tree_Order + 1,
+                            zxnz_tree_Parent_Path: _target.zxnz_tree_Parent_Path + _target.zxnz_ID + ','
                         },
                         where: {
-                            zxnz_id: _source.zxnz_id
+                            zxnz_ID: _source.zxnz_ID
                         }
                     }));
 
                     _sqls.push(zxnz.sql.mysql.update({
                         table: table,
                         updates: {
-                            zxnz_tree_son_count: _target.zxnz_tree_son_count + 1
+                            zxnz_tree_Son_Count: _target.zxnz_tree_Son_Count + 1
                         },
                         where: {
-                            zxnz_id: _target.zxnz_id
+                            zxnz_ID: _target.zxnz_ID
                         }
                     }));
 
                     _sqls.push(zxnz.sql.mysql.update({
                         table: table,
-                        updates: "zxnz_tree_order=zxnz_tree_order-1",
-                        where: "zxnz_tree_pid=" + _source.zxnz_id + " and zxnz_tree_order>" + _source.zxnz_tree_order
+                        updates: "zxnz_tree_Order = zxnz_tree_Order - 1",
+                        where: "zxnz_tree_Pid = " + _source.zxnz_ID + " and zxnz_tree_Order > " + _source.zxnz_tree_Order
                     }));
 
                     _sqls.push(zxnz.sql.mysql.update({
                         table: table,
-                        updates: "zxnz_tree_parent_path=replace(zxnz_tree_parent_path, '"+_source.zxnz_tree_parent_path+"', '"+_target.zxnz_tree_parent_path + _target.zxnz_id + ",')",
-                        where: "locate('"+_source.zxnz_tree_parent_path + _source.zxnz_id +"', zxnz_tree_parent_path)<>0"
+                        updates: "zxnz_tree_Parent_Path=replace(zxnz_tree_Parent_Path, '"+_source.zxnz_tree_Parent_Path+"', '"+_target.zxnz_tree_Parent_Path + _target.zxnz_ID + ",')",
+                        where: "locate('"+_source.zxnz_tree_Parent_Path + _source.zxnz_ID +"', zxnz_tree_Parent_Path)<>0"
                     }));
 
                     return _sqls.join('');

@@ -27,6 +27,6 @@
     "@zeanium/database-mysql": "latest",
     "@zeanium/http-server": "latest",
     "jsonwebtoken": "^8.5.1",
-    "open": "^7.0.2"
+    "open": "^7.0.4"
   }
 }
