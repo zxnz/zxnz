@@ -5,8 +5,8 @@ module.exports = zn.Class({
     methods: {
         addNode: function (table, model){
             var _pid = model.zxnz_tree_Pid || 0;
-            return zxnz.db.mysql.createTransactionBlock()
-                .query(zxnz.sql.mysql.select({
+            return zxnz.store.database.createTransactionBlock()
+                .query(zxnz.store.sql.select({
                     table: table,
                     fields: 'zxnz_ID, zxnz_tree_Depth, zxnz_tree_Parent_Path, zxnz_tree_Order',
                     where: {
@@ -32,10 +32,10 @@ module.exports = zn.Class({
                     model.zxnz_tree_Parent_Path = _parentPath;
                     model.zxnz_tree_Order = _treeOrder;
                     model.zxnz_tree_Depth = _depth;
-                    return zxnz.sql.mysql.insert({
+                    return zxnz.store.sql.insert({
                         table: table,
                         values: model
-                    }) + zxnz.sql.mysql.update({
+                    }) + zxnz.store.sql.update({
                         table: table,
                         updates: 'zxnz_tree_Son_Count=zxnz_tree_Son_Count+1',
                         where: {
@@ -45,8 +45,8 @@ module.exports = zn.Class({
                 });
         },
         deleteNode: function (table, where){
-            return zxnz.db.mysql.createTransactionBlock()
-                .query(zn.sql.select({
+            return zxnz.store.database.createTransactionBlock()
+                .query(zxnz.store.sql.select({
                     table: table,
                     fields: 'zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order',
                     where: where
@@ -69,7 +69,7 @@ module.exports = zn.Class({
                 });
         },
         orderNode: function (table, id, order){
-            return zxnz.db.mysql.createTransactionBlock()
+            return zxnz.store.database.createTransactionBlock()
                 .query('select {0} from {1} where zxnz_ID={2};select count(zxnz_ID) as count from {1} where zxnz_tree_Pid=(select zxnz_tree_Pid from {1} where zxnz_ID={2});'.format('zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order', table, id))
                 .query('order', function (sql, rows, fields){
                     var _model = rows[0][0],
@@ -101,16 +101,20 @@ module.exports = zn.Class({
         },
         moveNode: function (table, source, target){
             var _fields = "zxnz_ID, zxnz_tree_Pid, zxnz_tree_Depth, zxnz_tree_Order, zxnz_tree_Son_Count, zxnz_tree_Max_Son_Count, zxnz_tree_Parent_Path";
-            return zxnz.db.mysql.createTransactionBlock()
-                .query(zxnz.sql.mysql.select({
+            return zxnz.store.database.createTransactionBlock()
+                .query(zxnz.store.sql.select({
                     table: table,
                     fields: _fields,
                     where: { zxnz_ID: source }
-                }) + zxnz.sql.mysql.select({
+                }) + zxnz.store.sql.select({
                     table: table,
                     fields: _fields,
                     where: { zxnz_ID: target }
-                })+"select max(zxnz_tree_Order) as target_zn_tree_order from "+table+" where zxnz_tree_Pid=" + target)
+                }) + zxnz.store.sql.select({
+                    table: table,
+                    fields: "max(zxnz_tree_Order) as target_zn_tree_order",
+                    where: { zxnz_tree_Pid: target }
+                }))
                 .query('order', function (sql, rows, fields){
                     var _source = rows[0][0],
                         _target = rows[1][0],
@@ -124,7 +128,7 @@ module.exports = zn.Class({
                     }
 
                     var _sqls = [];
-                    _sqls.push(zxnz.sql.mysql.update({
+                    _sqls.push(zxnz.store.sql.update({
                         table: table,
                         updates: "zxnz_tree_Son_Count=zxnz_tree_Son_Count-1",
                         where: {
@@ -132,7 +136,7 @@ module.exports = zn.Class({
                         }
                     }));
 
-                    _sqls.push(zxnz.sql.mysql.update({
+                    _sqls.push(zxnz.store.sql.update({
                         table: table,
                         updates: {
                             zxnz_tree_Pid: _target.zxnz_ID,
@@ -145,7 +149,7 @@ module.exports = zn.Class({
                         }
                     }));
 
-                    _sqls.push(zxnz.sql.mysql.update({
+                    _sqls.push(zxnz.store.sql.update({
                         table: table,
                         updates: {
                             zxnz_tree_Son_Count: _target.zxnz_tree_Son_Count + 1
@@ -155,13 +159,13 @@ module.exports = zn.Class({
                         }
                     }));
 
-                    _sqls.push(zxnz.sql.mysql.update({
+                    _sqls.push(zxnz.store.sql.update({
                         table: table,
                         updates: "zxnz_tree_Order = zxnz_tree_Order - 1",
                         where: "zxnz_tree_Pid = " + _source.zxnz_ID + " and zxnz_tree_Order > " + _source.zxnz_tree_Order
                     }));
 
-                    _sqls.push(zxnz.sql.mysql.update({
+                    _sqls.push(zxnz.store.sql.update({
                         table: table,
                         updates: "zxnz_tree_Parent_Path=replace(zxnz_tree_Parent_Path, '"+_source.zxnz_tree_Parent_Path+"', '"+_target.zxnz_tree_Parent_Path + _target.zxnz_ID + ",')",
                         where: "locate('"+_source.zxnz_tree_Parent_Path + _source.zxnz_ID +"', zxnz_tree_Parent_Path)<>0"

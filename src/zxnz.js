@@ -91,7 +91,6 @@ var __ = {
 
 var zxnz = {
     app: {},
-    store: {},
     plugin: {},
     module: {},
     require: function (){
@@ -148,5 +147,7 @@ if(!global.zn){
         zxnz.require('zeanium', '@zeanium/core');
     }
 }
+
+zxnz.store = require('./store.js');
 
 module.exports = global.zxnz = zxnz;

@@ -1,5 +1,4 @@
 module.exports = {
-    Collection: require('./Collection'),
-    Model: require('./Model'),
-    Store: require('./Store')
+    Dao: require('./Dao'),
+    Model: require('./Model')
 }

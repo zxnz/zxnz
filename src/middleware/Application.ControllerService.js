@@ -1,47 +1,68 @@
-var SQL_TEMPLATE = "insert into {0} ({1}) values ({2});";
-
-module.exports = zn.Class({
+var node_fs = require('fs'),
+    node_path = require('path');
+module.exports = zn.ControllerService({
     methods: {
-        parseJsonData: function (data){
-            var _data = [];
-            for(var key in data){
-                _data = _data.concat(this.__getDataSql(key, data[key]));
+        initDataBase: function (){
+            return zxnz.store.createDataBase();
+        },
+        initModel: function (Model){
+            return zxnz.store.query(Model.getCreateModelSql());
+        },
+        initModels: function (){
+            var _defer = zn.async.defer();
+            var _tran = zxnz.store.beginTransaction();
+            for(var model of this.application._modelArray){
+                _tran.query(model.getCreateModelSql());
             }
 
-            return _data;
+            _tran.on('error', function (sender, err){
+                _defer.reject(err);
+            }).on('finally', function (sender, data){
+                _defer.resolve(data);
+            }).commit();
+
+            return _defer.promise;
         },
-        __getDataSql: function (table, data){
-            var _sqls = [],
-                _keys = [],
-                _values = [],
-                _dnode = {
-                    zxnz_tree_depth: 1,
-                    zxnz_tree_order: 1,
-                    zxnz_tree_son_count: 0,
-                    zxnz_tree_parent_path: ','
-                },
-                _pnode = null;
-            data.forEach(function (item, index){
-                if(item.zxnz_tree_pid){
-                    _pnode = zn.overwrite(data[item.zxnz_tree_pid-1], _dnode);
-                    _pnode.zxnz_tree_son_count = _pnode.zxnz_tree_son_count + 1;
-                    item.zxnz_tree_order = _pnode.zxnz_tree_son_count;
-                    item.zxnz_tree_depth = _pnode.zxnz_tree_depth + 1;
-                    item.zxnz_tree_parent_path = _pnode.zxnz_tree_parent_path + item.zxnz_tree_pid + ',';
+        initFunction: function (){
+            var _defer = zn.async.defer(),
+                _config = this.application.config;
+            if(!_config.dataPath){
+                return response.error('The dataPath of config is not exist!');
+            }
+            var _dataPath = node_path.join(_config.root, _config.dataPath);
+            if(!node_fs.existsSync(_dataPath)){
+                return response.error('dataPath "' + _dataPath + '" is not exist!');
+            }
+            var _fns = [],
+                _sql = '',
+                _file = null,
+                _content = null;
+            node_fs.readdirSync(_dataPath).forEach(function (file){
+                _content = node_fs.readFileSync(node_path.join(_dataPath, file), 'utf-8');
+                _file = node_path.parse(node_path.join(_dataPath, file));
+                switch (_file.ext.toLowerCase()) {
+                    case '.sql':
+                    case '.txt':
+                        if(file.indexOf('zxnz_function_') != -1){
+                            _fns = _fns.concat(_content.split('----'));
+                        }else {
+                            _sql += _content;
+                        }
+                        break;
                 }
             });
-
-            data.forEach(function (item){
-                _keys = [];
-                _values = [];
-                for(var key in item){
-                    _keys.push(key);
-                    _values.push(zn.is(item[key], 'string')?("'" +item[key]+ "'"):item[key]);
-                }
-                _sqls.push(SQL_TEMPLATE.format(table, _keys.join(','), _values.join(',')));
+            var _tran = zxnz.store.beginTransaction();
+            _fns.length && _fns.forEach(function (fn_sql){
+                fn_sql && _tran.query(fn_sql);
             });
+            _sql && _tran.query(_sql);
+            _tran.on('error', function (sender, err){
+                _defer.reject(err);
+            }).on('finally', function (sender, data){
+                _defer.resolve(data);
+            }).commit();
 
-            return _sqls;
+            return _defer.promise;
         }
     }
 });

@@ -1,11 +1,11 @@
 /**
  * Created by yangyxu on 9/17/14.
  */
-var Block = require('./TreeBlock');
-module.exports = zxnz.Collection({
+var TreeTransactionBlock = require('./TreeTransactionBlock.js');
+module.exports = zxnz.Dao({
     methods: {
         init: function (){
-            this._block = new Block();
+            this._block = new TreeTransactionBlock();
         },
         orderTreeNode: function (id, order){
             var _defer = zn.async.defer();

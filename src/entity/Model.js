@@ -1,8 +1,8 @@
 /**
  * Created by yangyxu on 9/17/14.
  */
-
- var __ = {
+var Dao = require('./Dao.js');
+var __ = {
     __getPropertyCreateSql: function (property, context){
         var _key = property.name,
             _type = property.type || [],
@@ -74,9 +74,6 @@
 };
 
 var Model = zn.Class({
-    mixins: [
-        //require('./ModelSql')
-    ],
     statics: {
         getTable: function (){
             return this.getMeta('tablePrefix') + this.getMeta('table');
@@ -247,6 +244,12 @@ var Model = zn.Class({
                 table : this.getTable(),
                 fields: this.getFields(argv.fields)
             }));
+        },
+        createDao: function (database){
+            var _Dao = this.getMeta('Dao') || Dao;
+            if(_Dao){
+                return new _Dao(this, database);
+            }
         }
     },
     methods: {
@@ -266,14 +269,26 @@ var Model = zn.Class({
 });
 
 zxnz.Model = function (){
-    var _args = arguments;
+    var _args = arguments,
+        _meta = {};
     if(_args.length == 1){
-        return zn.Class(Model, _args[0]);
+        _meta = _args[0];
     }
+
     if(_args.length == 2){
-        _args[1].table = _args[0];
-        return zn.Class(Model, _args[1]);
+        _meta = _args[1];
+        _meta.table = _args[0];
     }
+
+    if(_meta.propertyPrefix && _meta.properties){
+        for(var _porp in _meta.properties){
+            _meta.properties[_meta.propertyPrefix + _porp] = _meta.properties[_porp];
+            _meta.properties[_porp] = null;
+            delete _meta.properties[_porp];
+        }
+    }
+
+    return zn.Class(Model, _meta);
 }
 
 module.exports = Model;

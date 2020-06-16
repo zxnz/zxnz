@@ -1,6 +1,6 @@
-var TreeCollection = require('./TreeCollection');
+var TreeDao = require('./TreeDao');
 module.exports = zn.Class({
-    collection: TreeCollection,
+    dao: TreeDao,
     properties: {
         zxnz_tree_Pid: {
             value: null,
