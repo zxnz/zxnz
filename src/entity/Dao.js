@@ -12,6 +12,12 @@ var Dao = zn.Class({
                 return this._sql;
             }
         },
+        table: {
+            readonly: true,
+            get: function (){
+                return this._table;
+            }
+        },
         Model: {
             readonly: true,
             get: function (){
@@ -37,6 +43,7 @@ var Dao = zn.Class({
                     }); 
                 }
                 this._Model = Model;
+                this._table = Model.getTable();
                 this._connector = database.connector;
                 this._sql = database.Builder;
             }

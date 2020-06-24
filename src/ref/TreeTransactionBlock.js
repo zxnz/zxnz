@@ -68,6 +68,32 @@ module.exports = zn.Class({
                     }
                 });
         },
+        deleteAllChildByPid: function (table, pid){
+            return zxnz.store.database.createTransactionBlock()
+                .query(zxnz.store.sql.select({
+                    table: table,
+                    fields: 'zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order',
+                    where: {
+                        zxnz_ID: pid
+                    }
+                }))
+                .query('delete', function (sql, rows, fields, tran){
+                    var _model = rows[0];
+                    if(_model){
+                        var _sql = 'delete from {0} where zxnz_ID={1};'.format(table, _model.zxnz_ID),
+                            _pid = +_model.zxnz_tree_Pid;
+
+                        if(_pid){
+                            _sql += 'update {0} set zxnz_tree_Son_Count=zxnz_tree_Son_Count-1 where zxnz_ID={1};'.format(table, _pid);
+                        }
+                        _sql += 'update {0} set zxnz_tree_Order=zxnz_tree_Order-1 where zxnz_tree_Order>{1} and zxnz_tree_Pid={2};'.format(table, _model.zxnz_tree_Order, _pid);
+                        _sql += "delete from {0} where locate(',{1},', zxnz_tree_Parent_Path)<>0;".format(table, _model.zxnz_ID);
+                        return _sql;
+                    } else {
+                        return this.rollback('The node is not exist!'), false;
+                    }
+                });
+        },
         orderNode: function (table, id, order){
             return zxnz.store.database.createTransactionBlock()
                 .query('select {0} from {1} where zxnz_ID={2};select count(zxnz_ID) as count from {1} where zxnz_tree_Pid=(select zxnz_tree_Pid from {1} where zxnz_ID={2});'.format('zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order', table, id))
@@ -141,7 +167,7 @@ module.exports = zn.Class({
                         updates: {
                             zxnz_tree_Pid: _target.zxnz_ID,
                             zxnz_tree_Depth: _target.zxnz_tree_Depth + 1,
-                            zxnz_tree_Order: _target_zn_tree_Order + 1,
+                            zxnz_tree_Order: _target.zxnz_tree_Order + 1,
                             zxnz_tree_Parent_Path: _target.zxnz_tree_Parent_Path + _target.zxnz_ID + ','
                         },
                         where: {

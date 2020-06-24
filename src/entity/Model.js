@@ -246,9 +246,20 @@ var Model = zn.Class({
             }));
         },
         createDao: function (database){
-            var _Dao = this.getMeta('Dao') || Dao;
+            var _mixins = this.getMeta('mixins')||[],
+                _Dao = this.getMeta('Dao'),
+                _Daos = [];
+            _mixins.filter(function (mixin){
+                if(mixin.getMeta('Dao')){
+                    _Daos.push(mixin.getMeta('Dao'));
+                }
+            });
             if(_Dao){
-                return new _Dao(this, database);
+                _Daos.push(_Dao);
+            }
+            if(_Daos.length){
+                var _DaoClass = zxnz.Dao({ mixins: _Daos });
+                return new _DaoClass(this, database);
             }
         }
     },
