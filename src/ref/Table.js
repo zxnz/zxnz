@@ -12,7 +12,12 @@ module.exports = zn.Class({
         },
         zxnz_table_Generated: {
             value: null,
-            type: ['tinyint', 1],
+            type: ['tinyint', 0],
+            default: false
+        },
+        zxnz_table_Updated: {
+            value: null,
+            type: ['tinyint', 0],
             default: false
         },
         zxnz_table_Mixins: {

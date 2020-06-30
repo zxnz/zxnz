@@ -59,7 +59,7 @@ module.exports = zn.Class({
                 throw new zn.ERROR.HttpRequestError({
                     code: 403,
                     message: "HTTP/1.1 403 DataBase is Null.",
-                    details: "HTTP/1.1 403 DataBase is Null, You Need Configuration For DataBase."
+                    detail: "HTTP/1.1 403 DataBase is Null, You Need Configuration For DataBase."
                 });
             }
 
@@ -71,7 +71,7 @@ module.exports = zn.Class({
                 throw new zn.ERROR.HttpRequestError({
                     code: 403,
                     message: "HTTP/1.1 403 DataBase is Null.",
-                    details: "HTTP/1.1 403 DataBase is Null, You Need Configuration For DataBase."
+                    detail: "HTTP/1.1 403 DataBase is Null, You Need Configuration For DataBase."
                 });
             }
 
@@ -83,7 +83,7 @@ module.exports = zn.Class({
                 throw new zn.ERROR.HttpRequestError({
                     code: 403,
                     message: "HTTP/1.1 403 Connector is Null.",
-                    details: "HTTP/1.1 403 Connector is Null, You Need Configuration For DataBase."
+                    detail: "HTTP/1.1 403 Connector is Null, You Need Configuration For DataBase."
                 });
             }
 
@@ -95,7 +95,7 @@ module.exports = zn.Class({
                 throw new zn.ERROR.HttpRequestError({
                     code: 403,
                     message: "HTTP/1.1 403 Connector is Null.",
-                    details: "HTTP/1.1 403 Connector is Null, You Need Configuration For DataBase."
+                    detail: "HTTP/1.1 403 Connector is Null, You Need Configuration For DataBase."
                 });
             }
             return _connector.query.apply(_connector, arguments);

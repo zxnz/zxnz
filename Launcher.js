@@ -4,24 +4,63 @@
 require('./index');
 var fs = require('fs'),
     os = require('os'),
+    node_child_process = require('child_process'),
     node_path = require('path');
 
 module.exports = zn.Class({
     statics: {
-        start: function (env, argv) {
-            return new this(env, argv);
+        start: function (env, argv, events) {
+            return new this(env, argv, events);
         }
     },
     properties: {
         env: null,
         argv: null,
+        events: null,
         server: null
     },
     methods: {
-        init: function (env, argv){
+        init: function (env, argv, events){
             this._env = env;
             this._argv = argv;
+            this._events = events;
+            this._count = 0;
             this.start(argv);
+        },
+        __initProcessEvents: function (){
+            process.on('beforeExit', function (code) {
+                zn.error('process.beforeExit', code);
+            }.bind(this));
+            process.on('disconnect', function (err, origin) {
+                zn.error('process.disconnect', err, origin);
+            }.bind(this));
+            process.on('exit', function (code) {
+                zn.error("process.exit(", code + ")");
+            }.bind(this));
+            process.on('message', function (message, sendHandle) {
+                zn.error('process.message', message, sendHandle);
+            }.bind(this));
+            process.on('multipleResolves', function (type, promise, value) {
+                zn.error('process.multipleResolves', type, promise, value);
+            }.bind(this));
+            process.on('rejectionHandled', function (promise) {
+                zn.error('process.rejectionHandled', promise);
+            }.bind(this));
+            process.on('unhandledRejection', function (reason, promise) {
+                zn.error('process.unhandledRejection', reason, promise);
+            }.bind(this));
+            process.on('uncaughtException', function (err, origin) {
+                zn.error('process.uncaughtException', err, origin);
+            }.bind(this));
+            process.on('uncaughtExceptionMonitor', function (err, origin) {
+                zn.error('process.uncaughtExceptionMonitor', err, origin);
+            }.bind(this));
+            process.on('warning', function (err, origin) {
+                zn.error('process.warning', err, origin);
+            }.bind(this));
+            process.on('SIGHUP', function (){
+
+            }.bind(this));
         },
         start: function (argv){
             var _configFilePath = this.getConfigFilePath(),
@@ -50,29 +89,31 @@ module.exports = zn.Class({
             return _host;
         },
         createHttpServer: function (config){
-            if(this._argv.debug){
-                zn.debug('Config: ', config);
-            }else {
-                process.on('uncaughtException', function (err) {
-                    zn.error(err);
-                    zn.error(err.stack);
-                });
-                process.on('exit', function (code) {
-                    zn.info('Exit code: ', code);
-                });
+            this.__initProcessEvents();
+            var _config = config || this._config,
+                _restart = zn.extend({
+                    timeout: 5000,
+                    max: 5
+                }, _config.restart);
+            if(this._count > _restart.max){
+                return zn.error('Restart count has over max value.'), false;
             }
 
+            this._config = _config;
+            this._count = this._count + 1;
             try {
-                if(config.node_paths){
-                    zxnz.resolve(config.node_paths, config.includeParentPath);
+                if(this._argv.debug){
+                    zn.debug('config: ', _config);
                 }
-
-                if(config.server_path){
-                    zxnz.http = zxnz.require(node_path.resolve(config.server_path, 'zeanium-http-server'), node_path.resolve(config.server_path, '@zeanium/http-server'));
+                if(_config.node_paths){
+                    zxnz.resolve(_config.node_paths, _config.includeParentPath);
+                }
+                if(_config.server_path){
+                    zxnz.http = zxnz.require(node_path.resolve(_config.server_path, 'zeanium-http-server'), node_path.resolve(_config.server_path, '@zeanium/http-server'));
                 }else{
                     zxnz.http = zxnz.require('@zeanium/http-server', 'zeanium-http-server');
                 }
-                this._server = zxnz.http.Server.createServer(config);
+                this._server = zxnz.http.Server.createServer(_config);
                 this._server.uses(require('./src/middleware/index.js'));
                 this._server.start();
             } catch (err) {

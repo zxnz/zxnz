@@ -261,6 +261,8 @@ var Model = zn.Class({
                 var _DaoClass = zxnz.Dao({ mixins: _Daos });
                 return new _DaoClass(this, database);
             }
+            
+            return new Dao(this, database);
         }
     },
     methods: {

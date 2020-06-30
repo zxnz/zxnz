@@ -11,7 +11,12 @@ module.exports = zn.Class({
         },
         zxnz_table_Field_Generated: {
             value: null,
-            type: ['tinyint', 1],
+            type: ['tinyint', 0],
+            default: false
+        },
+        zxnz_table_Field_Updated: {
+            value: null,
+            type: ['tinyint', 0],
             default: false
         },
         zxnz_table_Field_Label: {
@@ -26,12 +31,12 @@ module.exports = zn.Class({
         },
         zxnz_table_Field_Hidden: {
             value: null,
-            type: ['tinyint', 1],
+            type: ['tinyint', 0],
             default: false
         },
         zxnz_table_Field_Repeat_Verify: {
             value: null,
-            type: ['tinyint', 1],
+            type: ['tinyint', 0],
             default: false
         },
         zxnz_table_Field_Input_Meta: {
