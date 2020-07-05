@@ -8,7 +8,7 @@ module.exports = zn.Class({
         zxnz_config_Namespaces: {
             value: null,
             type: ['varchar', 200],
-            default: ''
+            default: ','
         },
         zxnz_config_Label: {
             value: null,
@@ -30,17 +30,22 @@ module.exports = zn.Class({
             type: ['varchar', 100],
             default: ''
         },
+        zxnz_config_Data: {
+            value: null,
+            type: ['varchar', 500],
+            default: ''
+        },
         zxnz_config_Input_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_config_Form_Meta: {
+        zxnz_config_Column_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_config_Column_Meta: {
+        zxnz_config_FormItem_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''

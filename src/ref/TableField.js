@@ -11,13 +11,8 @@ module.exports = zn.Class({
         },
         zxnz_table_Field_Generated: {
             value: null,
-            type: ['tinyint', 0],
-            default: false
-        },
-        zxnz_table_Field_Updated: {
-            value: null,
-            type: ['tinyint', 0],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Field_Label: {
             value: null,
@@ -31,13 +26,18 @@ module.exports = zn.Class({
         },
         zxnz_table_Field_Hidden: {
             value: null,
-            type: ['tinyint', 0],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Field_Repeat_Verify: {
             value: null,
-            type: ['tinyint', 0],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
+        },
+        zxnz_table_Field_Data: {
+            value: null,
+            type: ['varchar', 500],
+            default: ''
         },
         zxnz_table_Field_Input_Meta: {
             value: null,
@@ -49,7 +49,7 @@ module.exports = zn.Class({
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_table_Field_Form_Meta: {
+        zxnz_table_Field_FormItem_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''

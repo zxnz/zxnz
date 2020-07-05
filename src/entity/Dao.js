@@ -18,6 +18,12 @@ var Dao = zn.Class({
                 return this._table;
             }
         },
+        block: {
+            readonly: true,
+            get: function (){
+                return this._block;
+            }
+        },
         Model: {
             readonly: true,
             get: function (){
@@ -37,10 +43,14 @@ var Dao = zn.Class({
                 }
                 if(!Model || !database){
                     throw new zn.ERROR.HttpRequestError({
-                        code: 401,
-                        message: "HTTP/1.1 403 db or Model is Null.",
-                        details: "HTTP/1.1 403 db or Model is Null, You Need Configuration For DataBase."
+                        code: 403,
+                        message: "Database or Model is Null.",
+                        detail: "Database or Model is Null, You Need Configuration For DataBase."
                     }); 
+                }
+                var _Block = this.constructor.getMeta('Block');
+                if(_Block){
+                    this._block = new _Block(database, this);
                 }
                 this._Model = Model;
                 this._table = Model.getTable();
@@ -48,8 +58,11 @@ var Dao = zn.Class({
                 this._sql = database.Builder;
             }
         },
-        beginTransaction: function (){
-            return this._connector.beginTransaction();
+        beginTransaction: function (events, before, after){
+            return this._connector.beginTransaction(events, before, after);
+        },
+        beginPoolTransaction: function (events, before, after){
+            return this._connector.beginPoolTransaction(events, before, after);
         },
         query: function (){
             return this._connector.query.apply(this._connector, arguments);

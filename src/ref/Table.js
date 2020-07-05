@@ -1,4 +1,5 @@
 module.exports = zn.Class({
+    Dao: require('./TableDao'),
     properties: {
         zxnz_table_Name: {
             value: null,
@@ -12,38 +13,28 @@ module.exports = zn.Class({
         },
         zxnz_table_Generated: {
             value: null,
-            type: ['tinyint', 0],
-            default: false
-        },
-        zxnz_table_Updated: {
-            value: null,
-            type: ['tinyint', 0],
-            default: false
-        },
-        zxnz_table_Mixins: {
-            value: null,
-            type: ['varchar', 100],
-            default: 'zxnz.ref.Base'
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Importable: {
             value: null,
-            type: ['tinyint', 1],
-            default: true
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Exportable: {
             value: null,
-            type: ['tinyint', 1],
-            default: true
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Inputable: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Outputable: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         }
     }
 });

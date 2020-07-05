@@ -1,7 +1,4 @@
 module.exports = {
-    API: require('./API'),
-    APICall: require('./APICall'),
-    APIFK: require('./APIFK'),
     Base: require('./Base'),
     Config: require('./Config'),
     ConfigFK: require('./ConfigFK'),

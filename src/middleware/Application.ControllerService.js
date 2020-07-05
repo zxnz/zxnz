@@ -9,23 +9,22 @@ module.exports = zn.ControllerService({
             return zxnz.store.query(Model.getCreateModelSql());
         },
         initModels: function (){
-            var _defer = zn.async.defer();
-            var _tran = zxnz.store.beginTransaction();
+            var _tran = zxnz.store.beginPoolTransaction();
             for(var model of this.application._modelArray){
                 _tran.query(model.getCreateModelSql());
             }
 
-            _tran.on('error', function (sender, err){
-                _defer.reject(err);
-            }).on('finally', function (sender, data){
-                _defer.resolve(data);
-            }).commit();
+            /*
+            _tran.query('', function (sql, rows, fields){
+                throw new Error('发现错误了');
+            }, function (){
 
-            return _defer.promise;
+            });*/
+
+            return _tran.commit();
         },
         initFunction: function (){
-            var _defer = zn.async.defer(),
-                _config = this.application.config;
+            var _config = this.application.config;
             if(!_config.dataPath){
                 return response.error('The dataPath of config is not exist!');
             }
@@ -51,18 +50,13 @@ module.exports = zn.ControllerService({
                         break;
                 }
             });
-            var _tran = zxnz.store.beginTransaction();
+            var _tran = zxnz.store.beginPoolTransaction();
             _fns.length && _fns.forEach(function (fn_sql){
                 fn_sql && _tran.query(fn_sql);
             });
             _sql && _tran.query(_sql);
-            _tran.on('error', function (sender, err){
-                _defer.reject(err);
-            }).on('finally', function (sender, data){
-                _defer.resolve(data);
-            }).commit();
 
-            return _defer.promise;
+            return _tran.commit();
         }
     }
 });

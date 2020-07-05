@@ -28,18 +28,18 @@ module.exports = zn.Class({
             this._database = null;
             this._databases = {};
         },
-        registerDataBases: function (databases){
+        registerDataBases: function (databases, events){
             switch(zn.type(databases)){
                 case 'array':
-                    return databases.map((database)=>this.registerDataBase(database));
+                    return databases.map((database)=>this.registerDataBase(database, events));
                 case 'object':
-                    return this.registerDataBase(databases);
+                    return this.registerDataBase(databases, events);
             }
         },
-        registerDataBase: function (config){
+        registerDataBase: function (config, events){
             var _name = config.name || config.database;
             var _database = zxnz.require(config.modules);
-            _database.connector = new _database.Connector(config);
+            _database.connector = new _database.Connector(config, events);
             if(config.default){
                 this.setCurrentDataBase(_database);
             }
@@ -77,8 +77,8 @@ module.exports = zn.Class({
 
             return _database.connector;
         },
-        beginTransaction: function (name){
-            var _connector = this.getConnector(name);
+        beginTransaction: function (events, before, after){
+            var _connector = this.getConnector();
             if(!_connector){
                 throw new zn.ERROR.HttpRequestError({
                     code: 403,
@@ -87,7 +87,19 @@ module.exports = zn.Class({
                 });
             }
 
-            return _connector.beginTransaction();
+            return _connector.beginTransaction(events, before, after);
+        },
+        beginPoolTransaction: function (events, before, after){
+            var _connector = this.getConnector();
+            if(!_connector){
+                throw new zn.ERROR.HttpRequestError({
+                    code: 403,
+                    message: "HTTP/1.1 403 Connector is Null.",
+                    detail: "HTTP/1.1 403 Connector is Null, You Need Configuration For DataBase."
+                });
+            }
+
+            return _connector.beginPoolTransaction(events, before, after);
         },
         query: function (){
             var _connector = this.getConnector();
@@ -99,9 +111,6 @@ module.exports = zn.Class({
                 });
             }
             return _connector.query.apply(_connector, arguments);
-        },
-        createDataBase: function (name) {
-            return this.getConnector(name).createDataBase();
         }
     }
 });

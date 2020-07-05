@@ -25,17 +25,22 @@ module.exports = zn.Class({
             type: ['varchar', 100],
             default: ''
         },
+        zxnz_constant_Data: {
+            value: null,
+            type: ['varchar', 500],
+            default: ''
+        },
         zxnz_constant_Input_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_constant_Form_Meta: {
+        zxnz_constant_Column_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_constant_Column_Meta: {
+        zxnz_constant_FormItem_Meta: {
             value: null,
             type: ['varchar', 500],
             default: ''

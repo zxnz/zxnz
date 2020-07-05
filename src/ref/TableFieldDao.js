@@ -1,10 +1,10 @@
 module.exports = zxnz.Dao({
-    Block: require('./TableDao.Block'),
+    Block: require('./TableFieldDao.Block'),
     methods: {
-        buildTable: function (uuid, tableField){
+        alterField: function (uuid, data){
             var _defer = zn.async.defer();
             this.beginTransaction()
-                .block(this.block.buildTable(uuid, tableField))
+                .block(this.block.alterField(uuid, data))
                 .on('error', function (sender, error){
                     _defer.reject(error);
                 })

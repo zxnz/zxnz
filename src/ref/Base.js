@@ -35,7 +35,7 @@ module.exports = zn.Class({
         },
         zxnz_Deleted: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['bit', 4],
             ignore: true,
             hidden: true,
             default: 0

@@ -17,23 +17,23 @@ module.exports = zn.Class({
         },
         zxnz_table_Field_Unsigned: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Field_Zerofill: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Field_Binary: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Field_Allow_Null: {
             value: null,
-            type: ['tinyint', 1],
-            default: false
+            type: ['tinyint', 4],
+            default: 0
         },
         zxnz_table_Field_Key: {
             value: null,
