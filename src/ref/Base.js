@@ -1,51 +1,51 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_', {
     properties: {
-        zxnz_ID: {
+        ID: {
             value: null,
             type: ['bigint', 20],
             ignore: true,
             primary: true
         },
-        zxnz_UUID: {
+        UUID: {
             value: null,
             type: ['char', 36],
             default: ''
         },
-        zxnz_Label: {
+        Label: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_Inserted_Time: {
+        Inserted_Time: {
             value: null,
             type: ['timestamp'],
             ignore: true,
             format: "date_format({},'%Y-%c-%d %h:%i:%s')",
             default: 'now()'
         },
-        zxnz_Updated_Time: {
+        Updated_Time: {
             value: null,
             type: ['datetime'],
             default: null
         },
-        zxnz_Deleted_Time: {
+        Deleted_Time: {
             value: null,
             type: ['datetime'],
             default: null
         },
-        zxnz_Deleted: {
+        Deleted: {
             value: null,
             type: ['bit', 4],
             ignore: true,
             hidden: true,
             default: 0
         },
-        zxnz_Selected_Time: {
+        Selected_Time: {
             value: null,
             type: ['datetime'],
             default: null
         },
-        zxnz_Note: {
+        Note: {
             value: null,
             type: ['varchar', 250],
             default: ''

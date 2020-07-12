@@ -1,51 +1,51 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_config_', {
     properties: {
-        zxnz_config_Namespace: {
+        Namespace: {
             value: null,
             type: ['varchar', 50],
             default: ''
         },
-        zxnz_config_Namespaces: {
+        Namespaces: {
             value: null,
             type: ['varchar', 200],
             default: ','
         },
-        zxnz_config_Label: {
+        Label: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_config_Name: {
+        Name: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_config_Value: {
+        Value: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_config_Text: {
+        Text: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_config_Data: {
+        Data: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_config_Input_Meta: {
+        Input_Props: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_config_Column_Meta: {
+        Column_Props: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_config_FormItem_Meta: {
+        FormItem_Props: {
             value: null,
             type: ['varchar', 500],
             default: ''

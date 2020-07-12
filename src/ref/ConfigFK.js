@@ -1,11 +1,11 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_config_fk_', {
     properties: {
-        zxnz_config_ID: {
+        ID: {
             value: null,
             type: ['int', 11],
             default: 0
         },
-        zxnz_config_Key: {
+        UUID: {
             value: null,
             type: ['varchar', 50],
             default: ''

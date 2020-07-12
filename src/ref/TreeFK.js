@@ -1,11 +1,11 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_tree_fk_', {
     properties: {
-        zxnz_tree_ID: {
+        ID: {
             value: null,
             type: ['bigint', 20],
             default: 0
         },
-        zxnz_tree_UUID: {
+        UUID: {
             value: null,
             type: ['varchar', 50],
             default: ''

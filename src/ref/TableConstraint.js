@@ -1,41 +1,41 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_table_constraint_', {
     properties: {
-        zxnz_table_ID: {
+        ID: {
             value: null,
             type: ['int', 11],
             default: 0
         },
-        zxnz_table_Name: {
+        Name: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_Columns: {
+        Columns: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_FK_Database: {
+        FK_Database: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_FK_Table: {
+        FK_Table: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_FK_Columns: {
+        FK_Columns: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_On_Update: {
+        On_Update: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_On_Delete: {
+        On_Delete: {
             value: null,
             type: ['varchar', 100],
             default: ''

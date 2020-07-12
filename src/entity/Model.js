@@ -283,7 +283,8 @@ var Model = zn.Class({
 
 zxnz.Model = function (){
     var _args = arguments,
-        _meta = {};
+        _meta = {},
+        _prefix = null;
     if(_args.length == 1){
         _meta = _args[0];
     }
@@ -292,10 +293,11 @@ zxnz.Model = function (){
         _meta = _args[1];
         _meta.table = _args[0];
     }
+    _prefix = _meta.prefix || _meta.propertyPrefix;
 
-    if(_meta.propertyPrefix && _meta.properties){
+    if(_prefix && _meta.properties){
         for(var _porp in _meta.properties){
-            _meta.properties[_meta.propertyPrefix + _porp] = _meta.properties[_porp];
+            _meta.properties[_prefix + _porp] = _meta.properties[_porp];
             _meta.properties[_porp] = null;
             delete _meta.properties[_porp];
         }

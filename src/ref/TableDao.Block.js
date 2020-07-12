@@ -17,13 +17,13 @@ module.exports = zxnz.Block({
                         zxnz_UUID: uuid
                     }
                 }))
-                .query('Verify table: ', function (sql, rows, fields){
+                .query('Verify table: ', function (sql, rows, fields, transaction){
                     _table = rows[0];
                     if(!_table){
-                        return this.rollback('The table is not exist!'), false;
+                        throw new Error('The table is not exist!');
                     }
                     if(!_rebuild && _table.zxnz_table_Generated){
-                        return this.rollback('The table has been generated!'), false;
+                        throw new Error('The table has been generated!');
                     }
 
                     return _self.sql.select({
@@ -33,9 +33,9 @@ module.exports = zxnz.Block({
                         }
                     });
                 })
-                .query('Build table: ', function (sql, data){
+                .query('Build table: ', function (sql, data, fields, transaction){
                     if(!data.length){
-                        return this.rollback('The table has no field!'), false;
+                        throw new Error('The table has no field!');
                     }
                     var _fields = [],
                         _field = [];

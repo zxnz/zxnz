@@ -1,46 +1,46 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_constant_', {
     properties: {
-        zxnz_constant_Name: {
+        Name: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_constant_Label: {
+        Label: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_constant_Namespace: {
+        Namespace: {
             value: null,
             type: ['varchar', 50],
             default: ''
         },
-        zxnz_constant_Value: {
+        Value: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_constant_Text: {
+        Text: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_constant_Data: {
+        Data: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_constant_Input_Meta: {
+        Input_Props: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_constant_Column_Meta: {
+        Column_Props: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_constant_FormItem_Meta: {
+        FormItem_Props: {
             value: null,
             type: ['varchar', 500],
             default: ''

@@ -1,37 +1,77 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_table_', {
     Dao: require('./TableDao'),
     properties: {
-        zxnz_table_Name: {
+        Name: {
             value: null,
             type: ['varchar', 100],
             default: ''
         },
-        zxnz_table_Parent_ID: {
+        Mixins: {
+            value: null,
+            type: ['varchar', 200],
+            default: ','
+        },
+        Forced: {
+            value: null,
+            type: ['bit', 7],
+            default: 1
+        },
+        Engine: {
+            value: null,
+            type: ['varchar', 100],
+            default: 'InnoDB'
+        },
+        Charset: {
+            value: null,
+            type: ['varchar', 100],
+            default: 'utf-8'
+        },
+        Comment: {
+            value: null,
+            type: ['varchar', 500],
+            default: ''
+        },
+        Prefix: {
+            value: null,
+            type: ['varchar', 100],
+            default: 'zxnz_user_defined_table_'
+        },
+        Parent_ID: {
             value: null,
             type: ['int', 11],
             default: 0
         },
-        zxnz_table_Generated: {
+        Status: {
+            value: null,
+            type: ['int', 11],
+            default: 0
+        },
+        Type: {
+            value: null,
+            type: ['int', 11],
+            default: 0
+        },
+        Generated: {
             value: null,
             type: ['tinyint', 4],
             default: 0
         },
-        zxnz_table_Importable: {
+        Importable: {
             value: null,
             type: ['tinyint', 4],
             default: 0
         },
-        zxnz_table_Exportable: {
+        Exportable: {
             value: null,
             type: ['tinyint', 4],
             default: 0
         },
-        zxnz_table_Inputable: {
+        Inputable: {
             value: null,
             type: ['tinyint', 4],
             default: 0
         },
-        zxnz_table_Outputable: {
+        Outputable: {
             value: null,
             type: ['tinyint', 4],
             default: 0

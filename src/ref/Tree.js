@@ -1,47 +1,47 @@
-module.exports = zn.Class({
+module.exports = zxnz.ModelRef('zxnz_tree_', {
     Dao: require('./TreeDao'),
     properties: {
-        zxnz_tree_Pid: {
+        Pid: {
             value: null,
             type: ['int', 11],
             default: 0
         },
-        zxnz_tree_Depth: {
-            value: null,
-            type: ['int', 11],
-            ignore: true,
-            default: 0
-        },
-        zxnz_tree_Order: {
+        Depth: {
             value: null,
             type: ['int', 11],
             ignore: true,
             default: 0
         },
-        zxnz_tree_Parent_Path: {
+        Order: {
+            value: null,
+            type: ['int', 11],
+            ignore: true,
+            default: 0
+        },
+        Parent_Path: {
             value: null,
             type: ['varchar', 250],
             ignore: true,
             default: ','
         },
-        zxnz_tree_Son_Count: {
+        Son_Count: {
             value: null,
             type: ['int', 11],
             ignore: true,
             default: 0
         },
-        zxnz_tree_Max_Son_Count: {
+        Max_Son_Count: {
             value: null,
             type: ['int', 11],
             ignore: true,
             default: 0
         },
-        zxnz_tree_Extend: {
+        Extend: {
             value: null,
             type: ['varchar', 500],
             default: ''
         },
-        zxnz_tree_Type: {
+        Type: {
             value: null,
             type: ['int', 11],
             default: 0

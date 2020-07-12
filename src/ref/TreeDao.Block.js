@@ -53,19 +53,18 @@ module.exports = zxnz.Block({
                 }))
                 .query('delete', function (sql, rows, fields, tran){
                     var _model = rows[0];
-                    if(_model){
-                        var _sql = 'delete from {0} where zxnz_ID={1};'.format(table, _model.zxnz_ID),
-                            _pid = +_model.zxnz_tree_Pid;
-
-                        if(_pid){
-                            _sql += 'update {0} set zxnz_tree_Son_Count=zxnz_tree_Son_Count-1 where zxnz_ID={1};'.format(table, _pid);
-                        }
-                        _sql += 'update {0} set zxnz_tree_Order=zxnz_tree_Order-1 where zxnz_tree_Order>{1} and zxnz_tree_Pid={2};'.format(table, _model.zxnz_tree_Order, _pid);
-                        _sql += "delete from {0} where locate(',{1},', zxnz_tree_Parent_Path)<>0;".format(table, _model.zxnz_ID);
-                        return _sql;
-                    } else {
-                        return this.rollback('The node is not exist!'), false;
+                    if(!_model){
+                        throw new Error('The node is not exist!');
                     }
+                    var _sql = 'delete from {0} where zxnz_ID={1};'.format(table, _model.zxnz_ID),
+                        _pid = +_model.zxnz_tree_Pid;
+
+                    if(_pid){
+                        _sql += 'update {0} set zxnz_tree_Son_Count=zxnz_tree_Son_Count-1 where zxnz_ID={1};'.format(table, _pid);
+                    }
+                    _sql += 'update {0} set zxnz_tree_Order=zxnz_tree_Order-1 where zxnz_tree_Order>{1} and zxnz_tree_Pid={2};'.format(table, _model.zxnz_tree_Order, _pid);
+                    _sql += "delete from {0} where locate(',{1},', zxnz_tree_Parent_Path)<>0;".format(table, _model.zxnz_ID);
+                    return _sql;
                 });
         },
         deleteAllChildByPid: function (table, pid){
@@ -79,19 +78,18 @@ module.exports = zxnz.Block({
                 }))
                 .query('delete', function (sql, rows, fields, tran){
                     var _model = rows[0];
-                    if(_model){
-                        var _sql = 'delete from {0} where zxnz_ID={1};'.format(table, _model.zxnz_ID),
-                            _pid = +_model.zxnz_tree_Pid;
-
-                        if(_pid){
-                            _sql += 'update {0} set zxnz_tree_Son_Count=zxnz_tree_Son_Count-1 where zxnz_ID={1};'.format(table, _pid);
-                        }
-                        _sql += 'update {0} set zxnz_tree_Order=zxnz_tree_Order-1 where zxnz_tree_Order>{1} and zxnz_tree_Pid={2};'.format(table, _model.zxnz_tree_Order, _pid);
-                        _sql += "delete from {0} where locate(',{1},', zxnz_tree_Parent_Path)<>0;".format(table, _model.zxnz_ID);
-                        return _sql;
-                    } else {
-                        return this.rollback('The node is not exist!'), false;
+                    if(!_model){
+                        throw new Error('The node is not exist!');
                     }
+                    var _sql = 'delete from {0} where zxnz_ID={1};'.format(table, _model.zxnz_ID),
+                        _pid = +_model.zxnz_tree_Pid;
+
+                    if(_pid){
+                        _sql += 'update {0} set zxnz_tree_Son_Count=zxnz_tree_Son_Count-1 where zxnz_ID={1};'.format(table, _pid);
+                    }
+                    _sql += 'update {0} set zxnz_tree_Order=zxnz_tree_Order-1 where zxnz_tree_Order>{1} and zxnz_tree_Pid={2};'.format(table, _model.zxnz_tree_Order, _pid);
+                    _sql += "delete from {0} where locate(',{1},', zxnz_tree_Parent_Path)<>0;".format(table, _model.zxnz_ID);
+                    return _sql;
                 });
         },
         orderNode: function (table, id, order){
@@ -101,28 +99,27 @@ module.exports = zxnz.Block({
                     var _model = rows[0][0],
                         _count = rows[1][0].count;
 
-                    if(_model){
-                        var _treeOrder = +_model.zxnz_tree_Order,
-                            _newOrder = _treeOrder - 1;
-
-                        if(order=='down'){
-                            _newOrder = _treeOrder + 1;
-                        }
-
-                        if(_newOrder < 1 ){
-                            _newOrder = 1;
-                        }
-
-                        if(_newOrder > _count){
-                            _newOrder = _count;
-                        }
-
-                        var _sql = 'update {0} set zxnz_tree_Order={1} where zxnz_tree_Order={2} and zxnz_tree_Pid={3};'.format(table, _treeOrder, _newOrder, _model.zxnz_tree_Pid);
-                        _sql += 'update {0} set zxnz_tree_Order={1} where zxnz_ID={2};'.format(table, _newOrder, _model.zxnz_ID);
-                        return _sql;
-                    } else {
-                        return this.rollback('The node is not exist!'), false;
+                    if(!_model){
+                        throw new Error('The node is not exist!');
                     }
+                    var _treeOrder = +_model.zxnz_tree_Order,
+                        _newOrder = _treeOrder - 1;
+
+                    if(order=='down'){
+                        _newOrder = _treeOrder + 1;
+                    }
+
+                    if(_newOrder < 1 ){
+                        _newOrder = 1;
+                    }
+
+                    if(_newOrder > _count){
+                        _newOrder = _count;
+                    }
+
+                    var _sql = 'update {0} set zxnz_tree_Order={1} where zxnz_tree_Order={2} and zxnz_tree_Pid={3};'.format(table, _treeOrder, _newOrder, _model.zxnz_tree_Pid);
+                    _sql += 'update {0} set zxnz_tree_Order={1} where zxnz_ID={2};'.format(table, _newOrder, _model.zxnz_ID);
+                    return _sql;
                 });
         },
         moveNode: function (table, source, target){
@@ -147,10 +144,10 @@ module.exports = zxnz.Block({
                         _target_zn_tree_order = rows[2][0].target_zn_tree_order;
 
                     if(_source.zxnz_tree_Parent_Path == _target.zxnz_tree_Parent_Path + _source.zxnz_ID + ','){
-                        return this.rollback('The source has in target node!'), false;
+                        throw new Error('The source has in target node!');
                     }
                     if(!_target || !_source){
-                        return this.rollback('The target or source is not exist!'), false;
+                        throw new Error('The target or source is not exist!');
                     }
 
                     var _sqls = [];
