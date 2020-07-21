@@ -14,13 +14,6 @@ module.exports = zn.ControllerService({
                 _tran.query(model.getCreateModelSql());
             }
 
-            /*
-            _tran.query('', function (sql, rows, fields){
-                throw new Error('发现错误了');
-            }, function (){
-
-            });*/
-
             return _tran.commit();
         },
         initFunction: function (){
