@@ -52,7 +52,7 @@ module.exports = zn.Controller('zxnz.application', {
         initFunction: {
             method: 'GET/POST',
             value: function (request, response, application, context, router){
-                this.service.initFunction()
+                this.service.initFunction(request, response, application, context, router)
                     .then(function (data){
                         response.success(data);
                     }, function (err){

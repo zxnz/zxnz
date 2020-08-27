@@ -3,18 +3,18 @@ module.exports = zxnz.ModelRef('zxnz_tree_', {
     properties: {
         Pid: {
             value: null,
-            type: ['int', 11],
+            type: ['bigint', 20],
             default: 0
         },
         Depth: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             ignore: true,
             default: 0
         },
         Order: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 2],
             ignore: true,
             default: 0
         },
@@ -26,13 +26,13 @@ module.exports = zxnz.ModelRef('zxnz_tree_', {
         },
         Son_Count: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 2],
             ignore: true,
             default: 0
         },
         Max_Son_Count: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 2],
             ignore: true,
             default: 0
         },
@@ -43,7 +43,7 @@ module.exports = zxnz.ModelRef('zxnz_tree_', {
         },
         Type: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             default: 0
         }
     }

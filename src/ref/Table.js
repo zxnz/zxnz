@@ -13,7 +13,7 @@ module.exports = zxnz.ModelRef('zxnz_table_', {
         },
         Forced: {
             value: null,
-            type: ['bit', 7],
+            type: ['tinyint', 1],
             default: 1
         },
         Engine: {
@@ -38,42 +38,42 @@ module.exports = zxnz.ModelRef('zxnz_table_', {
         },
         Parent_ID: {
             value: null,
-            type: ['int', 11],
+            type: ['bigint', 20],
             default: 0
         },
         Status: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             default: 0
         },
         Type: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             default: 0
         },
         Generated: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Importable: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Exportable: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Inputable: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Outputable: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         }
     }

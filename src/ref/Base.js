@@ -35,7 +35,7 @@ module.exports = zxnz.ModelRef('zxnz_', {
         },
         Deleted: {
             value: null,
-            type: ['bit', 4],
+            type: ['tinyint', 1],
             ignore: true,
             hidden: true,
             default: 0

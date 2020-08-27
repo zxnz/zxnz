@@ -2,7 +2,7 @@ module.exports = zxnz.ModelRef('zxnz_table_constraint_', {
     properties: {
         ID: {
             value: null,
-            type: ['int', 11],
+            type: ['bigint', 20],
             default: 0
         },
         Name: {

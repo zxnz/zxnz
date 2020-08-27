@@ -2,7 +2,7 @@ module.exports = zxnz.ModelRef('zxnz_config_', {
     properties: {
         id: {
             value: null,
-            type: ['int', 11],
+            type: ['bigint', 20],
             default: 0
         },
         uuid: {

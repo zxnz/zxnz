@@ -150,5 +150,6 @@ if(!global.zn){
 }
 
 zxnz.store = require('./zxnz.store.js');
+zxnz.JSONWriter = require('./JSONWriter');
 
 module.exports = global.zxnz = zxnz;

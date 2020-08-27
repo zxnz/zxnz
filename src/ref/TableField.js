@@ -15,22 +15,22 @@ module.exports = zxnz.ModelRef('zxnz_table_field_', {
         },
         Order: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             default: 0
         },
         Status: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             default: 0
         },
         Ignore: {
             value: null,
-            type: ['bit', 7],
+            type: ['tinyint', 1],
             default: 0
         },
         Primary: {
             value: null,
-            type: ['bit', 7],
+            type: ['tinyint', 1],
             default: 0
         },
         Format: {
@@ -55,7 +55,7 @@ module.exports = zxnz.ModelRef('zxnz_table_field_', {
         },
         Hidden: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Value: {
@@ -70,27 +70,27 @@ module.exports = zxnz.ModelRef('zxnz_table_field_', {
         },
         Length: {
             value: null,
-            type: ['int', 11],
+            type: ['int', 10],
             default: 0
         },
         Unique: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Unsigned: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Zerofill: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Allow_Null: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Comment: {
@@ -105,17 +105,17 @@ module.exports = zxnz.ModelRef('zxnz_table_field_', {
         },
         Required: {
             value: null,
-            type: ['bit', 7],
+            type: ['tinyint', 1],
             default: 0
         },
         Generated: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Repeat_Verify: {
             value: null,
-            type: ['tinyint', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Data: {
