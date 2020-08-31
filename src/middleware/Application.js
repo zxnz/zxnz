@@ -12,11 +12,15 @@ module.exports = zn.Middleware.Application({
         initControllers: function (application, controllers){
             var _config = zn.extend({}, application._config, application._serverContext._config),
                 _mode = _config.mode || process.env.NODE_ENV;
+            /*
             if(_mode == 'development'){
                 Controllers.forEach(function (Controller){
                     controllers[Controller.getMeta('controller')] = Controller;
                 });
-            }
+            }*/
+            Controllers.forEach(function (Controller){
+                controllers[Controller.getMeta('controller')] = Controller;
+            });
         }
     }
 });
