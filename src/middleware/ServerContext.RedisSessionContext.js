@@ -59,7 +59,7 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
         saveSession: function (session){
             var _id = session.getId();
             this._redisClient.set(_id, session.serialize());
-            this._redisClient.expire(_id, this._config.expire || 60 * 60 * 60);
+            this._redisClient.expire(_id, this._config.expire || 60 * 60 * 60 * 24);
             return this;
         },
         empty: function (){

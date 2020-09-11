@@ -36,10 +36,11 @@ module.exports = zn.Middleware.ServerContext({
                 });
             }
             if(process.env.NODE_ENV == 'development') {
+                /*
                 zn.debug('routes( ' + context.routes.length + ' ): ')
                 context.routes.forEach(function (route){
                     zn.debug('route: ',  route.path);
-                });
+                });*/
             }
 
             if(_config.redis){
