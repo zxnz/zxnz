@@ -28,6 +28,7 @@ module.exports = zn.Class({
             this.start(argv);
         },
         __initProcessEvents: function (){
+            require('events').EventEmitter.defaultMaxListeners = 100;
             process.on('beforeExit', function (code) {
                 zn.error('process.beforeExit', code);
             }.bind(this));
@@ -56,7 +57,7 @@ module.exports = zn.Class({
                 zn.error('process.uncaughtExceptionMonitor', err, origin);
             }.bind(this));
             process.on('warning', function (err, origin) {
-                zn.error('process.warning', err, origin);
+                zn.warn('process.warning', err, origin);
             }.bind(this));
             process.on('SIGHUP', function (){
 
