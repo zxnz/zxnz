@@ -10,6 +10,9 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
         init: function (config, serverContext){
             try {
                 var _client = this._redisClient = node_redis.createClient(config);
+                _client.select(0, function (err, res){
+
+                });
                 _client.on('error', function (err){
                     zn.error('Redis Client Error: ', err);
                 });
@@ -40,9 +43,10 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
         },
         getSession: function (sessionId, success, error){
             this._redisClient.get(sessionId, function (err, value){
-                if(!err) {
+                if(value && !err) {
                     var _session = this.newSession();
                     _session.setProps(JSON.parse(value));
+                    _session.setId(sessionId);
                     _session.updateExpiresTime();
                     _session.save();
                     success && success(_session);
@@ -57,9 +61,16 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
             return this._redisClient.expire(sessionId, -1), this;
         },
         saveSession: function (session){
-            var _id = session.getId();
-            this._redisClient.set(_id, session.serialize());
-            this._redisClient.expire(_id, this._config.expire || 60 * 60 * 60 * 24);
+            var _id = session.getId(),
+                _expire = this._config.expire || 60 * 60 * 24;
+            if(!_id){
+                zn.error('Session id is not exist!');
+            }else{
+                zn.info('save session: ', _expire, _id);
+                this._redisClient.set(_id, session.serialize());
+                this._redisClient.expire(_id, _expire);
+            }
+
             return this;
         },
         empty: function (){
