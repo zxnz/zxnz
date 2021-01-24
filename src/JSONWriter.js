@@ -38,6 +38,9 @@ module.exports = zn.Class({
     
             return node_fs.writeFileSync(_file, JSON.stringify(_content, null, 4)), this;
         },
+        getKeyValue: function (key){
+            return this.getKey(key);
+        },
         getKey: function (key){
             if(!key) return null;
             var _file = node_path.join(this._dir, this._output),
