@@ -1,14 +1,6 @@
-module.exports = {
-    Base: require('./Base'),
-    Config: require('./Config'),
-    ConfigFK: require('./ConfigFK'),
-    Constant: require('./Constant'),
-    ConstantFK: require('./ConstantFK'),
-    Table: require('./Table'),
-    TableConstraint: require('./TableConstraint'),
-    TableFK: require('./TableFK'),
-    TableField: require('./TableField'),
-    TableFieldFK: require('./TableFieldFK'),
-    Tree: require('./Tree'),
-    TreeFK: require('./TreeFK')
-};
+module.exports = zn.extend(
+    require('./base/index.js'), 
+    require('./rights/index.js'), 
+    require('./table/index.js'),
+    require('./tree/index.js')
+);

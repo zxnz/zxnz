@@ -104,7 +104,7 @@ var zxnz = {
                 _value = require(_value);
             } catch (err){
                 if(_argv.length){
-                    zn.error('zxnz.require Error: ', err);
+                    zn.error('zxnz.require', err);
                     return arguments.callee.apply(null, _argv);
                 }else{
                     throw err;
@@ -149,7 +149,7 @@ if(!global.zn){
     }
 }
 
-zxnz.store = require('./zxnz.store.js');
 zxnz.JSONWriter = require('./JSONWriter');
+zxnz.store = require('./zxnz.store.js');
 
 module.exports = global.zxnz = zxnz;

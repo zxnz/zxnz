@@ -6,7 +6,7 @@ module.exports = zxnz.Block({
         addNode: function (table, model){
             var _pid = model.zxnz_tree_Pid || 0;
             return this.createTransactionBlock()
-                .query(this.sql.select({
+                .query(zxnz.sql.select({
                     table: table,
                     fields: 'zxnz_ID, zxnz_tree_Depth, zxnz_tree_Parent_Path, zxnz_tree_Order',
                     where: {
@@ -32,10 +32,10 @@ module.exports = zxnz.Block({
                     model.zxnz_tree_Parent_Path = _parentPath;
                     model.zxnz_tree_Order = _treeOrder;
                     model.zxnz_tree_Depth = _depth;
-                    return this.sql.insert({
+                    return zxnz.sql.insert({
                         table: table,
                         values: model
-                    }) + this.sql.update({
+                    }) + zxnz.sql.update({
                         table: table,
                         updates: 'zxnz_tree_Son_Count=zxnz_tree_Son_Count+1',
                         where: {
@@ -46,7 +46,7 @@ module.exports = zxnz.Block({
         },
         deleteNode: function (table, where){
             return this.createTransactionBlock()
-                .query(this.sql.select({
+                .query(zxnz.sql.select({
                     table: table,
                     fields: 'zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order',
                     where: where
@@ -64,12 +64,13 @@ module.exports = zxnz.Block({
                     }
                     _sql += 'update {0} set zxnz_tree_Order=zxnz_tree_Order-1 where zxnz_tree_Order>{1} and zxnz_tree_Pid={2};'.format(table, _model.zxnz_tree_Order, _pid);
                     _sql += "delete from {0} where locate(',{1},', zxnz_tree_Parent_Path)<>0;".format(table, _model.zxnz_ID);
+                    
                     return _sql;
                 });
         },
         deleteAllChildByPid: function (table, pid){
             return this.createTransactionBlock()
-                .query(this.sql.select({
+                .query(zxnz.sql.select({
                     table: table,
                     fields: 'zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order',
                     where: {
@@ -125,15 +126,15 @@ module.exports = zxnz.Block({
         moveNode: function (table, source, target){
             var _fields = "zxnz_ID, zxnz_tree_Pid, zxnz_tree_Depth, zxnz_tree_Order, zxnz_tree_Son_Count, zxnz_tree_Max_Son_Count, zxnz_tree_Parent_Path";
             return this.createTransactionBlock()
-                .query(this.sql.select({
+                .query(zxnz.sql.select({
                     table: table,
                     fields: _fields,
                     where: { zxnz_ID: source }
-                }) + this.sql.select({
+                }) + zxnz.sql.select({
                     table: table,
                     fields: _fields,
                     where: { zxnz_ID: target }
-                }) + this.sql.select({
+                }) + zxnz.sql.select({
                     table: table,
                     fields: "max(zxnz_tree_Order) as target_zn_tree_order",
                     where: { zxnz_tree_Pid: target }
@@ -151,7 +152,7 @@ module.exports = zxnz.Block({
                     }
 
                     var _sqls = [];
-                    _sqls.push(this.sql.update({
+                    _sqls.push(zxnz.sql.update({
                         table: table,
                         updates: "zxnz_tree_Son_Count=zxnz_tree_Son_Count-1",
                         where: {
@@ -159,7 +160,7 @@ module.exports = zxnz.Block({
                         }
                     }));
 
-                    _sqls.push(this.sql.update({
+                    _sqls.push(zxnz.sql.update({
                         table: table,
                         updates: {
                             zxnz_tree_Pid: _target.zxnz_ID,
@@ -172,7 +173,7 @@ module.exports = zxnz.Block({
                         }
                     }));
 
-                    _sqls.push(this.sql.update({
+                    _sqls.push(zxnz.sql.update({
                         table: table,
                         updates: {
                             zxnz_tree_Son_Count: _target.zxnz_tree_Son_Count + 1
@@ -182,13 +183,13 @@ module.exports = zxnz.Block({
                         }
                     }));
 
-                    _sqls.push(this.sql.update({
+                    _sqls.push(zxnz.sql.update({
                         table: table,
                         updates: "zxnz_tree_Order = zxnz_tree_Order - 1",
                         where: "zxnz_tree_Pid = " + _source.zxnz_ID + " and zxnz_tree_Order > " + _source.zxnz_tree_Order
                     }));
 
-                    _sqls.push(this.sql.update({
+                    _sqls.push(zxnz.sql.update({
                         table: table,
                         updates: "zxnz_tree_Parent_Path=replace(zxnz_tree_Parent_Path, '"+_source.zxnz_tree_Parent_Path+"', '"+_target.zxnz_tree_Parent_Path + _target.zxnz_ID + ",')",
                         where: "locate('"+_source.zxnz_tree_Parent_Path + _source.zxnz_ID +"', zxnz_tree_Parent_Path)<>0"

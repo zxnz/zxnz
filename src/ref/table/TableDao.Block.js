@@ -4,14 +4,13 @@
 module.exports = zxnz.Block({
     methods: {
         createTable: function (values){
-            var _self = this;
+            
         },
         buildTable: function (uuid, tableField){
             var _tableName = this._tableName,
-                _table = null,
-                _self = this;
+                _table = null;
             return this.createTransactionBlock()
-                .query(_self.sql.select({
+                .query(zxnz.sql.select({
                     table: _tableName,
                     where: {
                         zxnz_UUID: uuid
@@ -26,7 +25,7 @@ module.exports = zxnz.Block({
                         throw new Error('The table has been generated!');
                     }
 
-                    return _self.sql.select({
+                    return zxnz.sql.select({
                         table: tableField,
                         where: {
                             zxnz_table_ID: _table.zxnz_ID
@@ -66,7 +65,7 @@ module.exports = zxnz.Block({
                     });
 
                     _tableSql += _fields.join(',') + ")ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-                    return _tableSql + _self.sql.update({
+                    return _tableSql + zxnz.sql.update({
                         table: _tableName,
                         updates: {
                             zxnz_table_Generated: 1
@@ -74,7 +73,7 @@ module.exports = zxnz.Block({
                         where: {
                             zxnz_UUID: uuid
                         }
-                    }) + _self.sql.update({
+                    }) + zxnz.sql.update({
                         table: tableField,
                         updates: {
                             zxnz_table_Field_Generated: 1

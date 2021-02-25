@@ -37,10 +37,11 @@ module.exports = zn.Class({
             }
         },
         registerDataBase: function (config, events){
-            var _name = config.name || config.database;
-            var _database = zxnz.require(config.modules);
-            _database.connector = new _database.Connector(config, events);
-            if(config.default){
+            var _config = Object.assign({}, config);
+            var _name = _config.name || _config.database;
+            var _database = zxnz.require(_config.modules);
+            _database.connector = new _database.Connector(_config, events);
+            if(_config.default){
                 this.setCurrentDataBase(_database);
             }
 
@@ -49,9 +50,14 @@ module.exports = zn.Class({
         setCurrentDataBase: function (database){
             this._database = database;
             zxnz.sql = database.Builder;
+            require('./ref/zxnz.sql.js');
         },
         getDataBase: function (name){
-            return this._databases[name||''] || this._database;
+            if(name){
+                return this._databases[name];
+            }
+
+            return this._database;
         },
         getSql: function (name){
             var _database = this.getDataBase(name);
@@ -66,7 +72,7 @@ module.exports = zn.Class({
             return _database.Builder;
         },
         getConnector: function (name){
-            var _database = this.getDataBase(name);
+            var _database = this._database || this.getDataBase(name);
             if(!_database){
                 throw new zn.ERROR.HttpRequestError({
                     code: 403,

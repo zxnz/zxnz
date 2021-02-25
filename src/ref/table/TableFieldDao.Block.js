@@ -4,10 +4,9 @@
 module.exports = zxnz.Block({
     methods: {
         alterField: function (uuid, tableField){
-            var _pid = model.zxnz_tree_Pid || 0,
-                _self = this;
+            var _pid = model.zxnz_tree_Pid || 0;
             return this.createTransactionBlock()
-                .query(_self.sql.select({
+                .query(zxnz.sql.select({
                     table: table,
                     fields: 'zxnz_ID, zxnz_tree_Depth, zxnz_tree_Parent_Path, zxnz_tree_Order',
                     where: {
@@ -33,10 +32,10 @@ module.exports = zxnz.Block({
                     model.zxnz_tree_Parent_Path = _parentPath;
                     model.zxnz_tree_Order = _treeOrder;
                     model.zxnz_tree_Depth = _depth;
-                    return _self.sql.insert({
+                    return zxnz.sql.insert({
                         table: table,
                         values: model
-                    }) + _self.sql.update({
+                    }) + zxnz.sql.update({
                         table: table,
                         updates: 'zxnz_tree_Son_Count=zxnz_tree_Son_Count+1',
                         where: {

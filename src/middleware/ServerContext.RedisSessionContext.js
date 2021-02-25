@@ -11,25 +11,29 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
             try {
                 var _client = this._redisClient = node_redis.createClient(config);
                 _client.select(0, function (err, res){
-
+                    if(err){
+                        return false;
+                    }else{
+                        zn.trace('Redis Session Context Connect DB0 Success.');
+                    }
                 });
                 _client.on('error', function (err){
-                    zn.error('Redis Client Error: ', err);
+                    zn.error('Redis Session Context Client Error.', err);
                 });
                 _client.on('ready', function (){
-                    zn.info('Redis Client Ready: ');
+                    zn.info('Redis Session Context Client Ready.');
                 });
                 _client.on('connect', function (){
-                    zn.info('Redis Client Connect: ');
+                    zn.info('Redis Session Context Client Connect.');
                 });
                 _client.on('reconnecting', function (){
-                    zn.info('Redis Client Reconnecting: ');
+                    zn.info('Redis Session Context Client Reconnecting.');
                 });
                 _client.on('end', function (){
-                    zn.error('Redis Client End: ');
+                    zn.error('Redis Session Context Client End.');
                 });
                 _client.on('warning', function (){
-                    zn.warn('Redis Client Warning: ');
+                    zn.warn('Redis Session Context Client Warning.');
                 });
             } catch (err) {
                 zn.error('Redis Client Error: ', err);

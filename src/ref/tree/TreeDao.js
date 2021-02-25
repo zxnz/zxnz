@@ -1,8 +1,9 @@
 /**
  * Created by yangyxu on 9/17/14.
  */
+
 module.exports = zxnz.Dao({
-    Block: require('./TableDao.Block'),
+    //Block: require('./TableDao.Block'),
     methods: {
         orderTreeNode: function (id, order){
             return this.beginPoolTransaction()

@@ -24,6 +24,7 @@ module.exports = zn.Controller('zxnz.application', {
                 model: null
             },
             value: function (request, response, application, context, router){
+                zn.debug(Object.keys(context._models));
                 var _model = request.getValue('model'),
                     _Model = application.resolveModel(_model) || context.resolveModel(_model);
                 if(_Model){
