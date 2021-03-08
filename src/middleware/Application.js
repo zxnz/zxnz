@@ -21,6 +21,9 @@ module.exports = zn.Middleware.Application({
             Controllers.forEach(function (Controller){
                 controllers[Controller.getMeta('controller')] = Controller;
             });
+        },
+        modelLoaded: function (key, model, application, serverContext){
+            model.createModelSql(key, application, serverContext);
         }
     }
 });

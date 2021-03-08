@@ -1,5 +1,4 @@
 module.exports = zxnz.ModelRef('zxnz_role_', {
-    mixins: [ require('./GroupFK') ],
     properties: {
         Name: {
             value: null,

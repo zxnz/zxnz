@@ -1,4 +1,7 @@
 module.exports = zxnz.ModelRef('zxnz_', {
+    mixins: [
+        require('./GroupFK')
+    ],
     properties: {
         ID: {
             value: null,
