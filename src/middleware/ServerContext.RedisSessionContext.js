@@ -55,19 +55,19 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
                 })), this;
             }
 
-            this._redisClient.get(_data.data, function (err, value){
+            return this.getSessionByKey(_data.data, success, error);
+        },
+        getSessionByKey: function (sessionKey, success, error){
+            return this._redisClient.get(sessionKey, function (err, value){
                 if(value && !err) {
                     var _session = this.newSession(JSON.parse(value));
-                    _session.setId(sessionId);
                     _session.updateExpiresTime();
                     _session.save();
                     success && success(_session);
                 }else{
                     error && error(err);
                 }
-            }.bind(this));
-
-            return this;
+            }.bind(this)), this;
         },
         removeSession: function (session){
             var _key = session.getKey();
