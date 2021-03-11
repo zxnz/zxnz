@@ -1,4 +1,4 @@
-module.exports = zxnz.ModelRef('zxnz_group_', {
+module.exports = zxnz.ModelRef('zxnz_merchant_', {
     properties: {
         Code: {
             value: null,
@@ -73,6 +73,16 @@ module.exports = zxnz.ModelRef('zxnz_group_', {
         Owners: {
             value: null,
             type: ['varchar', 200],
+            default: ','
+        },
+        Owner_UUID: {
+            value: null,
+            type: ['varchar', 50],
+            default: ''
+        },
+        Owner_UUIDS: {
+            value: null,
+            type: ['varchar', 2000],
             default: ','
         }
     }

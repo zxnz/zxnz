@@ -3,5 +3,7 @@ module.exports = {
     Role: require('./Role'),
     RoleFK: require('./RoleFK'),
     User: require('./User'),
-    UserFK: require('./UserFK')
+    UserFK: require('./UserFK'),
+    Merchant: require('./Merchant'),
+    MerchantFK: require('./MerchantFK')
 }

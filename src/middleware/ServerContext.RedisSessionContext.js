@@ -46,10 +46,18 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
             }), this;
         },
         getSession: function (sessionId, success, error){
-            this._redisClient.get(sessionId, function (err, value){
+            var _data = this.jwtVerifyToken(sessionId);
+            if(_data.exp > Date.now()){
+                return error && error(new zn.ERROR.HttpRequestError({
+                    code: 401,
+                    message: "401.1 Token失效",
+                    detail: "登录Token已经过期失效。"
+                })), this;
+            }
+
+            this._redisClient.get(_data.data, function (err, value){
                 if(value && !err) {
-                    var _session = this.newSession();
-                    _session.setProps(JSON.parse(value));
+                    var _session = this.newSession(JSON.parse(value));
                     _session.setId(sessionId);
                     _session.updateExpiresTime();
                     _session.save();
@@ -61,19 +69,27 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
 
             return this;
         },
-        removeSession: function (sessionId){
-            return this._redisClient.expire(sessionId, -1), this;
+        removeSession: function (session){
+            var _key = session.getKey();
+            if(!_key) {
+                return zn.error('Session key is not exist!'), this;
+            }
+
+            return this._redisClient.expire(session.getKey(), -1), this;
         },
         saveSession: function (session){
-            var _id = session.getId(),
+            var _key = session.getKey(),
                 _expire = this._config.expire || 60 * 60 * 24;
-            if(!_id){
-                zn.error('Session id is not exist!');
-            }else{
-                zn.info('save session: ', _expire, _id);
-                this._redisClient.set(_id, session.serialize());
-                this._redisClient.expire(_id, _expire);
+            if(!_key){
+                return zn.error('Session key is not exist!'), this;
             }
+
+            zn.info('save session: ', {
+                expire: _expire,
+                key: _key
+            });
+            this._redisClient.set(_key, session.serialize());
+            this._redisClient.expire(_key, _expire);
 
             return this;
         },

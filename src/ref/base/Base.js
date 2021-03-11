@@ -1,6 +1,6 @@
 module.exports = zxnz.ModelRef('zxnz_', {
     mixins: [
-        require('./GroupFK')
+        //require('../auth/MerchantFK')
     ],
     properties: {
         ID: {

@@ -311,7 +311,7 @@ zxnz.Model = function (){
         }
     }
 
-    return zn.Class(Model, _meta);
+    return zn.Class(Model, (zxnz.http.Middleware.callMiddlewareMethod(zxnz.http.Middleware.TYPES.MODEL, "define", [_meta]) || _meta));
 }
 
 module.exports = Model;
