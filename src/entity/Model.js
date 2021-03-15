@@ -2,7 +2,7 @@
  * Created by yangyxu on 9/17/14.
  */
 var Dao = require('./Dao.js');
-var ModelSql = require('./ModelSql.js');
+var ModelSqlClass = require('./ModelSql.js');
 var __ = {
     __getPropertyCreateSql: function (property, context){
         var _key = property.name,
@@ -266,11 +266,11 @@ var Model = zn.Class({
             return new Dao(this, database);
         },
         createModelSql: function (key, application){
-            var _ModelSql = this.getMeta('ModelSql') || ModelSql;
-            var _key = _ModelSql.getMeta('table') || key;
-            var _modelSql = application._Sql[_key] = new _ModelSql(application, this);
-            
-            return _modelSql;
+            var _ModelSqlClass = this.getMeta('ModelSql') || ModelSqlClass;
+            var _key = key || _ModelSqlClass.getMeta('table');
+            var _modelSql = new _ModelSqlClass(application, this);
+
+            return application.registerModelSql(_key, _modelSql), _modelSql;
         }
     },
     methods: {

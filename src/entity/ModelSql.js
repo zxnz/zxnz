@@ -1,8 +1,7 @@
-var ModelSql = zn.Class({
+var ModelSqlClass = zn.Class({
     properties: {
         application: null,
-        model: null,
-        table: null
+        model: null
     },
     methods: {
         init: {
@@ -10,12 +9,12 @@ var ModelSql = zn.Class({
             value: function (application, model){
                 this._application = application;
                 this._model = model;
-                this._table = model.getTable();
-                this._fields = model.getFields();
+                this._table_ = model.getTable();
+                this._fields_ = model.getFields();
             }
         },
         table: function (table){
-            var _table = this._table;
+            var _table = this._table_;
             if(!table) return _table;
             if(zn.is(table, 'function')){
                 _table = table(_table, this);
@@ -24,7 +23,7 @@ var ModelSql = zn.Class({
             return _table;
         },
         fields: function (fields){
-            var _fields = this._fields;
+            var _fields = this._fields_;
             if(!fields) return _fields;
             if(zn.is(fields, 'function')){
                 _fields = fields(_fields, this);
@@ -34,12 +33,24 @@ var ModelSql = zn.Class({
         },
         select: function (argv){
             return zxnz.sql.select(zn.extend({
-                table: this._table
+                table: this._table_,
+                fields: this.fields()
             }, argv));
         },
         update: function (argv){
             return zxnz.sql.update(zn.extend({
                 table: this._table
+            }, argv));
+        },
+        delete: function (argv){
+            return zxnz.sql.delete(zn.extend({
+                table: this._table_
+            }, argv));
+        },
+        paging: function (argv){
+            return zxnz.sql.paging(zn.extend({
+                table: this._table_,
+                fields: this.fields()
             }, argv));
         }
     }
@@ -55,7 +66,7 @@ zxnz.ModelSql = function (){
         _meta.table = _args[0];
     }
 
-    return zn.Class(ModelSql, _meta);
+    return zn.Class(ModelSqlClass, _meta);
 }
 
-module.exports = ModelSql;
+module.exports = ModelSqlClass;
