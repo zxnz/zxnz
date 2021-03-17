@@ -31,6 +31,11 @@ var ModelSqlClass = zn.Class({
 
             return _fields;
         },
+        insert: function (argv){
+            return zxnz.sql.insert(zn.extend({
+                table: this._table_
+            }, argv));
+        },
         select: function (argv){
             return zxnz.sql.select(zn.extend({
                 table: this._table_,
