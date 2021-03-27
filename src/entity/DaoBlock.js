@@ -1,21 +1,9 @@
-var Block = zn.Class({
+var DaoBlock = zn.Class({
     properties: {
         dao: {
             readonly: true,
             get: function (){
                 return this._dao;
-            }
-        },
-        database: {
-            readonly: true,
-            get: function (){
-                return this._database;
-            }
-        },
-        sql: {
-            readonly: true,
-            get: function (){
-                return this._sql;
             }
         },
         table: {
@@ -28,16 +16,14 @@ var Block = zn.Class({
     methods: {
         init: {
             auto: true,
-            value: function (database, dao){
+            value: function (dao){
                 this._dao = dao;
-                this._database = database;
-                this._sql = database.Builder;
                 this._table = dao._table;
             }
         },
         createTransactionBlock: function (){
-            if(this._database){
-                return this._database.createTransactionBlock();
+            if(this._dao){
+                return this._dao.createTransactionBlock();
             } else {
                 throw new zn.ERROR.HttpRequestError({
                     code: 403,
@@ -49,11 +35,11 @@ var Block = zn.Class({
     }
 });
 
-zxnz.Block = function (){
+zxnz.DaoBlock = function (){
     var _args = arguments,
         _meta = _args[0];
 
-    return zn.Class(Block, _meta);
+    return zn.Class(DaoBlock, _meta);
 }
 
-module.exports = Block;
+module.exports = DaoBlock;

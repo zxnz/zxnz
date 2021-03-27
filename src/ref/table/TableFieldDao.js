@@ -1,5 +1,5 @@
 module.exports = zxnz.Dao({
-    Block: require('./TableFieldDao.Block'),
+    Block: require('./TableFieldDaoBlock'),
     methods: {
         alterField: function (uuid, data){
             return this.beginPoolTransaction()

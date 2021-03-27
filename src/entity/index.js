@@ -1,6 +1,8 @@
 module.exports = {
-    Block: require('./Block'),
     Dao: require('./Dao'),
+    DaoBlock: require('./DaoBlock'),
     Model: require('./Model'),
-    ModelRef: require('./ModelRef')
+    ModelBlock: require('./ModelBlock'),
+    ModelRef: require('./ModelRef'),
+    ModelSql: require('./ModelSql')
 }

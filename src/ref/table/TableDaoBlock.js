@@ -1,7 +1,7 @@
 /**
  * Created by yangyxu on 9/17/14.
  */
-module.exports = zxnz.Block({
+module.exports = zxnz.DaoBlock({
     methods: {
         createTable: function (values){
             

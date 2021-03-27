@@ -1,3 +1,4 @@
 module.exports = [
-    require('./Application')
+    require('./Application'),
+    require('./Tree')
 ];

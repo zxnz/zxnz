@@ -1,15 +1,15 @@
 module.exports = zxnz.ModelRef('zxnz_rights_', {
     properties: {
-        Type: {
-            value: null,
-            type: ['int', 11],
-            default: 0
-        },
         Owner: {
             value: null,
             type: ['int', 11],
             default: 0,
-            convert: 'zxnz_user({})'
+            convert: 'zxnz_rights_user_id({})'
+        },
+        Type: {
+            value: null,
+            type: ['int', 11],
+            default: 0
         },
         Enabled: {
             value: null,

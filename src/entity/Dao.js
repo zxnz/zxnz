@@ -1,15 +1,10 @@
+var DaoBlock = require('./DaoBlock');
 var Dao = zn.Class({
     properties: {
-        connector: {
+        Model: {
             readonly: true,
             get: function (){
-                return this._connector;
-            }
-        },
-        sql: {
-            readonly: true,
-            get: function (){
-                return this._sql;
+                return this._Model;
             }
         },
         table: {
@@ -18,16 +13,28 @@ var Dao = zn.Class({
                 return this._table;
             }
         },
+        sql: {
+            readonly: true,
+            get: function (){
+                return this._sql;
+            }
+        },
         block: {
             readonly: true,
             get: function (){
                 return this._block;
             }
         },
-        Model: {
+        connector: {
             readonly: true,
             get: function (){
-                return this._Model;
+                return this._connector;
+            }
+        },
+        database: {
+            readonly: true,
+            get: function (){
+                return this._database;
             }
         }
     },
@@ -48,15 +55,35 @@ var Dao = zn.Class({
                         detail: "Database or Model is Null, You Need Configuration For DataBase."
                     }); 
                 }
-                var _Block = this.constructor.getMeta('Block');
-                if(_Block){
-                    this._block = new _Block(database, this);
-                }
                 this._Model = Model;
                 this._table = Model.getTable();
+                this._database = database;
                 this._connector = database.connector;
                 this._sql = database.Builder;
+                this._block = this.createBlock();
             }
+        },
+        createBlock: function (){
+            var _mixins = this.constructor.getMeta('mixins')||[],
+                _Block = this.constructor.getMeta('Block'),
+                _Blocks = [];
+            _mixins.filter(function (mixin){
+                if(mixin.getMeta('Block')){
+                    _Blocks.push(mixin.getMeta('Block'));
+                }
+            });
+            if(_Block){
+                _Blocks.push(_Block);
+            }
+            if(_Blocks.length){
+                var _DaoBlockClass = zxnz.DaoBlock({ mixins: _Blocks });
+                return new _DaoBlockClass(this);
+            }
+            
+            return new DaoBlock(this);
+        },
+        createTransactionBlock: function (context){
+            return this._database.createTransactionBlock(context);
         },
         beginTransaction: function (events, before, after){
             return this._connector.beginTransaction(events, before, after);
@@ -68,10 +95,16 @@ var Dao = zn.Class({
             return this._connector.query.apply(this._connector, arguments);
         },
         insert: function (values){
-            return this._connector.query(this._Model.getInsertSql({ values: values }));
+            return this._connector.query(this._sql.insert({
+                table: this._table,
+                values: values
+            }));
         },
         select: function (argv){
-            return this._connector.query(this._Model.getSelectSql(argv));
+            return this._connector.query(this._sql.select(zn.extend({
+                table: this._table,
+                fields: this._Model.getFields()
+            }, argv)));
         },
         selectOne: function (argv){
             var _defer = zn.async.defer();
@@ -85,13 +118,23 @@ var Dao = zn.Class({
             return _defer.promise;
         },
         paging: function (argv){
-            return this._connector.query(this._Model.getPagingSql(argv));
+            return this._connector.query(this._sql.paging(zn.extend({
+                table: this._table,
+                fields: this._Model.getFields()
+            }, argv)));
         },
         update: function (updates, where){
-            return this._connector.query(this._Model.getUpdateSql({ updates: updates, where: where }));
+            return this._connector.query(this._sql.update({
+                table: this._table,
+                updates: updates, 
+                where: where
+            }));
         },
         delete: function (where){
-            return this._connector.query(this._Model.getDeleteSql({ where : where }));
+            return this._connector.query(this._sql.delete({
+                table: this._table,
+                where: where
+            }));
         }
     }
 });

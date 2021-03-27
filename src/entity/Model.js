@@ -210,42 +210,6 @@ var Model = zn.Class({
 
             return _fields.join(',');
         },
-        getInsertSql: function (argv){
-            return zxnz.sql.insert(zn.overwrite(argv, {
-                table : this.getTable(),
-                values: this.getValues(argv.values)
-            }));
-        },
-        getSelectSql: function (argv){
-            argv = zn.overwrite(argv, {
-                table : this.getTable()
-            });
-            
-            if(typeof argv.fields == 'string' && argv.fields.indexOf(' as ')!=-1){
-                //console.log(argv.fields);
-            }else {
-                argv.fields = this.getFields(argv.fields, argv.hidden);
-            }
-
-            return zxnz.sql.select(argv);
-        },
-        getDeleteSql: function (argv){
-            return zxnz.sql.delete(zn.overwrite(argv, {
-                table : this.getTable()
-            }));
-        },
-        getUpdateSql: function (argv){
-            return zxnz.sql.update(zn.overwrite(argv, {
-                table : this.getTable(),
-                updates: this.getUpdates(argv.updates)
-            }));
-        },
-        getPagingSql: function (argv){
-            return zxnz.sql.paging(zn.overwrite(argv, {
-                table : this.getTable(),
-                fields: this.getFields(argv.fields)
-            }));
-        },
         createDao: function (database){
             var _mixins = this.getMeta('mixins')||[],
                 _Dao = this.getMeta('Dao'),
@@ -255,6 +219,7 @@ var Model = zn.Class({
                     _Daos.push(mixin.getMeta('Dao'));
                 }
             });
+            
             if(_Dao){
                 _Daos.push(_Dao);
             }
@@ -266,6 +231,10 @@ var Model = zn.Class({
             return new Dao(this, database);
         },
         createModelSql: function (key, application){
+            if(application && key && application.resolveModelSql(key)){
+                return application.resolveModelSql(key);
+            }
+            
             var _ModelSqlClass = this.getMeta('ModelSql') || ModelSqlClass;
             var _key = key || _ModelSqlClass.getMeta('table');
             var _modelSql = new _ModelSqlClass(application, this);
