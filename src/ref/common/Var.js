@@ -1,18 +1,18 @@
-module.exports = zxnz.ModelRef('zxnz_menu_', {
+module.exports = zxnz.ModelRef('zxnz_var_', {
     properties: {
-        Scope: {
-            value: null,
-            type: ['bit', 4],
-            default: 0  // 0: publish 公共, 1: private 私有
-        },
         Disabled: {
             value: null,
             type: ['bit', 4],
             default: 0
         },
-        Label: {
+        Value: {
             value: null,
             type: ['varchar', 100],
+            default: ''
+        },
+        Label: {
+            value: null,
+            type: ['varchar', 1000],
             default: ''
         },
         Icon: {
@@ -20,7 +20,7 @@ module.exports = zxnz.ModelRef('zxnz_menu_', {
             type: ['varchar', 50],
             default: ''
         },
-        Img: {
+        Status: {
             value: null,
             type: ['varchar', 200],
             default: ''

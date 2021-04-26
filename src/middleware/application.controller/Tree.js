@@ -1,4 +1,5 @@
 module.exports = zn.Controller('zxnz.tree', {
+    validate: true,
     methods: {
         orderNode: {
             method: 'GET/POST',

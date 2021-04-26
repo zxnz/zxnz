@@ -45,11 +45,6 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 10],
             default: 'normal'
         },
-        Rights_Logic: {
-            value: null,
-            type: ['varchar', 100],
-            default: 'rights.logic.default'
-        },
         Icon: {
             value: null,
             type: ['varchar', 20],

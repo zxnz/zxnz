@@ -95,6 +95,7 @@ var Dao = zn.Class({
             return this._connector.query.apply(this._connector, arguments);
         },
         insert: function (values){
+            values.zxnz_UUID = zn.uuid();
             return this._connector.query(this._sql.insert({
                 table: this._table,
                 values: values

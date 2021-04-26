@@ -40,6 +40,7 @@ module.exports = zxnz.DaoBlock({
                         throw new Error('The zxnz_tree_Max_Son_Count of the node is full!');
                     }
 
+                    model.zxnz_UUID = zn.uuid();
                     model.zxnz_tree_Parent_Path = _parentPath;
                     model.zxnz_tree_Order = _treeOrder;
                     model.zxnz_tree_Depth = _depth;

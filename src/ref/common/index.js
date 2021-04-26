@@ -4,5 +4,7 @@ module.exports = {
     Constant: require('./Constant'),
     ConstantFK: require('./ConstantFK'),
     Menu: require('./Menu'),
-    MenuFK: require('./MenuFK')
+    MenuFK: require('./MenuFK'),
+    Var: require('./Var'),
+    VarFK: require('./VarFK')
 };

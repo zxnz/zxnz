@@ -3,15 +3,24 @@ module.exports = zxnz.ModelRef('zxnz_user_', {
         require('./RoleFK')
     ],
     properties: {
-        Group_Owner_ID: {
+        Actived: {
             value: null,
-            type: ['bigint', 20],
+            type: ['tinyint', 1],
+            default: 0
+        },
+        Agents: {
+            value: null,
+            type: ['varchar', 500],
+            default: ','
+        },
+        State: {
+            value: null,
+            type: ['tinyint', 1],
             default: 0
         },
         Roles: {
             value: null,
             type: ['varchar', 500],
-            convert: 'zxnz_rights_roles_convert({})',
             default: ','
         },
         Name: {
@@ -19,12 +28,12 @@ module.exports = zxnz.ModelRef('zxnz_user_', {
             type: ['varchar', 50],
             default: ''
         },
-        Mobile: {
+        Phone: {
             value: null,
             type: ['varchar', 20],
             default: ''
         },
-        Mobile_Verified: {
+        Phone_Verified: {
             value: null,
             type: ['tinyint', 1],
             default: 0
@@ -39,28 +48,12 @@ module.exports = zxnz.ModelRef('zxnz_user_', {
             type: ['tinyint', 1],
             default: 0
         },
-        State: {
-            value: null,
-            type: ['bit', 4],
-            default: 0
-        },
-        Actived: {
-            value: null,
-            type: ['tinyint', 1],
-            default: 0
-        },
-        Agents: {
-            value: null,
-            type: ['varchar', 500],
-            convert: 'zxnz_rights_roles_convert({})',
-            default: ','
-        },
-        Login_Name: {
+        Username: {
             value: null,
             type: ['varchar', 50],
             default: ''
         },
-        Login_Password: {
+        Password: {
             value: null,
             type: ['varchar', 50],
             default: ''

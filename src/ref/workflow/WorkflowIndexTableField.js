@@ -5,12 +5,12 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 50],
             default: ''
         },
-        table_uuid: {
+        schema_uuid: {
             value: null,
             type: ['varchar', 50],
             default: ''
         },
-        var_uuid: {
+        table_uuid: {
             value: null,
             type: ['varchar', 50],
             default: ''

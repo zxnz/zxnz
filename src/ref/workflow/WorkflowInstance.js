@@ -42,27 +42,25 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Previous: {
             value: null,
-            type: ['int', 11],
-            convert: 'zxnz_workflow_convert_instance({})',
-            default: 0
+            type: ['varchar', 50],
+            default: ''
         },
         Next: {
             value: null,
-            type: ['int', 11],
-            convert: 'zxnz_workflow_convert_instance({})',
-            default: 0
-        },
-        Previous_Schemas: {
-            value: null,
-            type: ['varchar', 200],
-            convert: 'zxnz_workflow_convert_schemas({})',
+            type: ['varchar', 50],
             default: ''
         },
-        Next_Schemas: {
+        Previous_Nodes: {
             value: null,
-            type: ['varchar', 200],
+            type: ['varchar', 250],
             convert: 'zxnz_workflow_convert_schemas({})',
-            default: ''
+            default: ','
+        },
+        Next_Nodes: {
+            value: null,
+            type: ['varchar', 250],
+            convert: 'zxnz_workflow_convert_schemas({})',
+            default: ','
         },
         Type: {
             value: null,
@@ -73,11 +71,6 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             value: null,
             type: ['varchar', 250],
             default: ','
-        },
-        Rights_Logic: {
-            value: null,
-            type: ['varchar', 100],
-            default: ''
         },
         Closed: {
             value: null,
