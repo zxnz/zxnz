@@ -3,9 +3,46 @@
  */
 
 var TREE_FIELDS = "zxnz_ID, zxnz_Label, zxnz_tree_Pid, zxnz_tree_Depth, zxnz_tree_Order, zxnz_tree_Son_Count, zxnz_tree_Max_Son_Count, zxnz_tree_Parent_Path";
-module.exports = zxnz.DaoBlock({
+module.exports = zxnz.SqlBlock({
     methods: {
-        addNode: function (table, model){
+        editNodeById: function (data, id){
+            return this.createTransactionBlock()
+                .query(zxnz.sql.update({
+                    table: this._table,
+                    updates: data,
+                    where: {
+                        zxnz_ID: id
+                    }
+                }));
+        },
+        selectChild: function (argv){
+            return this.createTransactionBlock()
+                .query(zxnz.sql.select(zn.extend({
+                    table: this._table
+                }, argv)));
+        },
+        selectChildByPid: function (pid){
+            return this.createTransactionBlock()
+                .query(zxnz.sql.select({
+                    table: this._table,
+                    where: {
+                        zxnz_tree_Pid: pid
+                    }
+                }));
+        },
+        selectAllChildByPid: function (pid){
+            return this.createTransactionBlock()
+                .query(zxnz.sql.select({
+                    table: this._table,
+                    where: "locate('," + pid +",', zxnz_tree_Parent_Path)<>0"
+                }));
+        },
+        addNodeByPid: function (pid, data){
+            data.zxnz_tree_Pid = pid;
+            return this.addNode(data);
+        },
+        addNode: function (model){
+            var table = this._table;
             if(typeof model == 'string'){
                 model = JSON.parse(model);
             }
@@ -60,7 +97,8 @@ module.exports = zxnz.DaoBlock({
                     ];
                 });
         },
-        deleteNode: function (table, where){
+        deleteNode: function (where){
+            var table = this._table;
             return this.createTransactionBlock()
                 .query(zxnz.sql.select({
                     table: table,
@@ -84,7 +122,8 @@ module.exports = zxnz.DaoBlock({
                     return _sql;
                 });
         },
-        deleteChildByPid: function (table, pid){
+        deleteChildByPid: function (pid){
+            var table = this._table;
             return this.createTransactionBlock()
                 .query(zxnz.sql.select({
                     table: table,
@@ -109,7 +148,8 @@ module.exports = zxnz.DaoBlock({
                     return _sql;
                 });
         },
-        deleteAllChildByPid: function (table, pid){
+        deleteAllChildByPid: function (pid){
+            var table = this._table;
             return this.createTransactionBlock()
                 .query(zxnz.sql.select({
                     table: table,
@@ -134,7 +174,8 @@ module.exports = zxnz.DaoBlock({
                     return _sql;
                 });
         },
-        orderNode: function (table, id, order){
+        orderNode: function (id, order){
+            var table = this._table;
             return this.createTransactionBlock()
                 .query('select {0} from {1} where zxnz_ID={2};select count(zxnz_ID) as count from {1} where zxnz_tree_Pid=(select zxnz_tree_Pid from {1} where zxnz_ID={2});'.format('zxnz_ID, zxnz_tree_Pid, zxnz_tree_Order', table, id))
                 .query('order', function (sql, rows, fields){
@@ -164,7 +205,8 @@ module.exports = zxnz.DaoBlock({
                     return _sql;
                 });
         },
-        moveNode: function (table, source, target){
+        moveNode: function (source, target){
+            var table = this._table;
             return this.createTransactionBlock()
                 .query([
                     zxnz.sql.select({

@@ -83,6 +83,18 @@ module.exports = zn.Class({
 
             return _database.connector;
         },
+        createTransactionBlock: function (){
+            var _connector = this.getConnector();
+            if(!_connector){
+                throw new zn.ERROR.HttpRequestError({
+                    code: 403,
+                    message: "HTTP/1.1 403 Connector is Null.",
+                    detail: "HTTP/1.1 403 Connector is Null, You Need Configuration For DataBase."
+                });
+            }
+
+            return _connector.createTransactionBlock();
+        },
         beginTransaction: function (events, before, after){
             var _connector = this.getConnector();
             if(!_connector){

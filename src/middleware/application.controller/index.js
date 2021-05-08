@@ -1,5 +1,6 @@
 module.exports = [
     require('./Application'),
     require('./Logger'),
-    require('./Tree')
+    require('./Tree.model'),
+    require('./Tree.table')
 ];

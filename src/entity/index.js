@@ -4,5 +4,6 @@ module.exports = {
     Model: require('./Model'),
     ModelBlock: require('./ModelBlock'),
     ModelRef: require('./ModelRef'),
-    ModelSql: require('./ModelSql')
-}
+    ModelSql: require('./ModelSql'),
+    SqlBlock: require('./SqlBlock')
+};

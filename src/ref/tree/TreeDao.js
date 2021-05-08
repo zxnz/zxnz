@@ -3,78 +3,62 @@
  */
 
 module.exports = zxnz.Dao({
-    Block: require('./TreeDaoBlock'),
+    SqlBlock: require('./TreeSqlBlock'),
     methods: {
         addNode: function (values){
             return this.beginPoolTransaction()
-                .block(this.block.addNode(this._table, values))
+                .block(this.sqlBlock.addNode(values))
                 .commit();
         },
         addNodeByPid: function (pid, values){
             values.zxnz_tree_Pid = pid;
             return this.beginPoolTransaction()
-                .block(this.block.addNode(this._table, values))
+                .block(this.sqlBlock.addNode(values))
                 .commit();
         },
         editNodeById: function (data, id){
             return this.beginPoolTransaction()
-                .query(zxnz.sql.update({
-                    table: this._table,
-                    updates: data,
-                    where: {
-                        zxnz_ID: id
-                    }
-                }))
+                .block(this.sqlBlock.editNodeById(data, id))
                 .commit();
         },
         selectChild: function (argv){
             return this.beginPoolTransaction()
-                .query(zxnz.sql.select(zn.extend({
-                    table: this._table
-                }, argv)))
+                .block(this.sqlBlock.selectChild(argv))
                 .commit();
         },
         selectChildByPid: function (pid){
             return this.beginPoolTransaction()
-                .query(zxnz.sql.select({
-                    table: this._table,
-                    where: {
-                        zxnz_tree_Pid: pid
-                    }
-                }))
+                .block(this.sqlBlock.selectChildByPid(pid))
                 .commit();
         },
         selectAllChildByPid: function (pid){
             return this.beginPoolTransaction()
-                .query(zxnz.sql.select({
-                    table: this._table,
-                    where: "locate('," + pid +",', zxnz_tree_Parent_Path)<>0"
-                }))
+                .block(this.sqlBlock.selectAllChildByPid(pid))
                 .commit();
         },
         deleteNode: function (where){
             return this.beginPoolTransaction()
-                .block(this.block.deleteNode(this._table, where))
+                .block(this.sqlBlock.deleteNode(where))
                 .commit();
         },
         deleteChildByPid: function (pid){
             return this.beginPoolTransaction()
-                .block(this.block.deleteChildByPid(this._table, pid))
+                .block(this.sqlBlock.deleteChildByPid(pid))
                 .commit();
         },
         deleteAllChildByPid: function (pid){
             return this.beginPoolTransaction()
-                .block(this.block.deleteAllChildByPid(this._table, pid))
+                .block(this.sqlBlock.deleteAllChildByPid(pid))
                 .commit();
         },
         orderNode: function (id, order){
             return this.beginPoolTransaction()
-                .block(this.block.orderNode(this._table, id, order))
+                .block(this.sqlBlock.orderNode(id, order))
                 .commit();
         },
         moveNode: function (source, target){
             return this.beginPoolTransaction()
-                .block(this.block.moveNode(this._table, source, target))
+                .block(this.sqlBlock.moveNode(source, target))
                 .commit();
         }
     }

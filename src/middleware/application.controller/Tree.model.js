@@ -1,4 +1,4 @@
-module.exports = zn.Controller('zxnz.tree', {
+module.exports = zn.Controller('zxnz.tree.model', {
     validate: true,
     methods: {
         orderNode: {

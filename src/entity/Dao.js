@@ -1,4 +1,4 @@
-var DaoBlock = require('./DaoBlock');
+var SqlBlock = require('./SqlBlock');
 var Dao = zn.Class({
     properties: {
         Model: {
@@ -19,10 +19,10 @@ var Dao = zn.Class({
                 return this._sql;
             }
         },
-        block: {
+        sqlBlock: {
             readonly: true,
             get: function (){
-                return this._block;
+                return this._sqlBlock;
             }
         },
         connector: {
@@ -60,27 +60,27 @@ var Dao = zn.Class({
                 this._database = database;
                 this._connector = database.connector;
                 this._sql = database.Builder;
-                this._block = this.createBlock();
+                this._sqlBlock = this.createSqlBlock();
             }
         },
-        createBlock: function (){
+        createSqlBlock: function (){
             var _mixins = this.constructor.getMeta('mixins')||[],
-                _Block = this.constructor.getMeta('Block'),
-                _Blocks = [];
+                _SqlBlock = this.constructor.getMeta('SqlBlock'),
+                _SqlBlocks = [];
             _mixins.filter(function (mixin){
-                if(mixin.getMeta('Block')){
-                    _Blocks.push(mixin.getMeta('Block'));
+                if(mixin.getMeta('SqlBlock')){
+                    _SqlBlocks.push(mixin.getMeta('SqlBlock'));
                 }
             });
-            if(_Block){
-                _Blocks.push(_Block);
+            if(_SqlBlock){
+                _SqlBlocks.push(_SqlBlock);
             }
-            if(_Blocks.length){
-                var _DaoBlockClass = zxnz.DaoBlock({ mixins: _Blocks });
-                return new _DaoBlockClass(this);
+            if(_SqlBlocks.length){
+                var _SqlBlockClass = zxnz.SqlBlock({ mixins: _SqlBlocks });
+                return new _SqlBlockClass(this._table, this._database);
             }
             
-            return new DaoBlock(this);
+            return new SqlBlock(this._table, this._database);
         },
         createTransactionBlock: function (context){
             return this._database.createTransactionBlock(context);
