@@ -40,6 +40,7 @@ module.exports = zn.Class({
             var _config = Object.assign({}, config);
             var _name = _config.name || _config.database;
             var _database = zxnz.require(_config.modules);
+            //zn.debug('database config: ', _config);
             _database.connector = new _database.Connector(_config, events);
             if(_config.default){
                 this.setCurrentDataBase(_database);
