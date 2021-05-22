@@ -35,6 +35,12 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
                 _client.on('warning', function (){
                     zn.warn('Redis Session Context Client Warning.');
                 });
+                process.nextTick(function() {
+                    // Force closing the connection while the command did not yet return
+                    zn.debug('redis client end.');
+                    //_client.end(true);
+                    //node_redis.debug_mode = false;
+                });
             } catch (err) {
                 zn.error('Redis Client Error: ', err);
             }
@@ -58,15 +64,23 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
             return this.getSessionByKey(_data.data, success, error);
         },
         getSessionByKey: function (sessionKey, success, error){
+            zn.debug('RedisSessionContext sessionKey: ', sessionKey);
             return this._redisClient.get(sessionKey, function (err, value){
-                if(value && !err) {
+                if(err) {
+                    return error && error(err);
+                }
+                if(value) {
                     var _session = this.newSession(JSON.parse(value));
                     _session.updateExpiresTime();
                     _session.save();
-                    success && success(_session);
-                }else{
-                    error && error(err);
+                    return success && success(_session);
                 }
+
+                return error && error(new zn.ERROR.HttpRequestError({
+                    code: 401,
+                    message: "401.1 Token失效",
+                    detail: "登录Token已经过期失效。"
+                }));
             }.bind(this)), this;
         },
         removeSession: function (session){
@@ -96,10 +110,30 @@ module.exports = zn.SessionContext('ZNSESSIONID_REDIS', {
         empty: function (){
             
         },
-        size: function (success, error){
-            this._redisClient.keys('*', function (){
-
+        all: function (success, error){
+            this._redisClient.keys("*", function (err, res){
+                if(err){
+                    return error && error(err);
+                }
+                success && success(res);
             });
+        },
+        size: function (success, error){
+            this._redisClient.keys("*", function (err, res){
+                if(err){
+                    return error && error(err);
+                }
+                success && success(res.length);
+            });
+        },
+        setKey: function (key, value){
+            return this._redisClient.set(key, value), this;
+        },
+        getKey: function (key, callback){
+            return this._redisClient.get(key, callback || function (){});
+        },
+        removeKey: function (key){
+            return this._redisClient.expire(key, -1), this;
         }
     }
 });

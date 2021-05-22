@@ -5,7 +5,8 @@ module.exports = zn.Middleware.ServerContext({
     methods: {
         registerSessionContext: function (sessionContext, context) {
             if(context.config.session && context.config.session.redis) {
-                return new RedisSessionContext(context.config.session.redis, context);
+                context.sessionContext = new RedisSessionContext(context.config.session.redis, context);
+                return context.sessionContext;
             }
         },
         requestAcceptBefore: function (clientRequest, serverResponse, context){
