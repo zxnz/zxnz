@@ -5,10 +5,10 @@ module.exports = zn.Controller('zxnz.redis.session', {
             method: 'GET/POST',
             value: function (request, response, application, context, router){
                 var _sessionContext = context.sessionContext;
-                _sessionContext.size(function (err){
-                    response.error(err);
-                }, function (data){
+                _sessionContext.size(function (data){
                     response.success(data);
+                }, function (err){
+                    response.error(err);
                 });
             }
         },
@@ -16,10 +16,10 @@ module.exports = zn.Controller('zxnz.redis.session', {
             method: 'GET/POST',
             value: function (request, response, application, context, router){
                 var _sessionContext = context.sessionContext;
-                _sessionContext.all(function (err){
-                    response.error(err);
-                }, function (data){
+                _sessionContext.all(function (data){
                     response.success(data);
+                }, function (err){
+                    response.error(err);
                 });
             }
         },
@@ -35,12 +35,16 @@ module.exports = zn.Controller('zxnz.redis.session', {
                     if(err){
                         response.error(err);
                     }else{
-                        var _session = JSON.parse(res||'{}');
-                        if(_session.expiresTime){
-                            var _expiresTime = new Date(_session.expiresTime);
-                            _session.expiresTimeString = _expiresTime.toLocaleDateString() + ' ' + _expiresTime.toLocaleTimeString();
+                        if(res.charAt(0)=='{'){
+                            var _session = JSON.parse(res||'{}');
+                            if(_session.expiresTime){
+                                var _expiresTime = new Date(_session.expiresTime);
+                                _session.expiresTimeString = _expiresTime.toLocaleDateString() + ' ' + _expiresTime.toLocaleTimeString();
+                            }
+                            response.success(_session);
+                        }else{
+                            response.success(res);
                         }
-                        response.success(_session);
                     }
                 });
             }
