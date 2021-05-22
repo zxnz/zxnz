@@ -35,9 +35,11 @@ module.exports = zn.Controller('zxnz.redis.session', {
                     if(err){
                         response.error(err);
                     }else{
-                        var _session = JSON.parse(res||'{}'),
-                            _expiresTime = new Date(_session.expiresTime);
-                        _session.expiresTimeString = _expiresTime.toLocaleDateString() + ' ' + _expiresTime.toLocaleTimeString();
+                        var _session = JSON.parse(res||'{}');
+                        if(_session.expiresTime){
+                            var _expiresTime = new Date(_session.expiresTime);
+                            _session.expiresTimeString = _expiresTime.toLocaleDateString() + ' ' + _expiresTime.toLocaleTimeString();
+                        }
                         response.success(_session);
                     }
                 });
