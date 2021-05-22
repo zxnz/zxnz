@@ -3,10 +3,12 @@ var ServerControllers = require('./server.controller/index.js');
 var RedisSessionContext = require('./ServerContext.RedisSessionContext');
 module.exports = zn.Middleware.ServerContext({
     methods: {
-        registerSessionContext: function (sessionContext, context) {
-            if(context.config.session && context.config.session.redis) {
-                context.sessionContext = new RedisSessionContext(context.config.session.redis, context);
-                return context.sessionContext;
+        registerSessionContext: function (context) {
+            if(!context.sessionContext){
+                if(context.config.session && context.config.session.redis) {
+                    context.sessionContext = new RedisSessionContext(context.config.session.redis, context);
+                    return context.sessionContext;
+                }
             }
         },
         requestAcceptBefore: function (clientRequest, serverResponse, context){

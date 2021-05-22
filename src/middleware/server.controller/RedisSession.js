@@ -31,19 +31,24 @@ module.exports = zn.Controller('zxnz.redis.session', {
             },
             value: function (request, response, application, context, router){
                 var _sessionContext = context.sessionContext;
-                _sessionContext.getKey(request.getValue('key'), function (err, res){
+                var _key = request.getValue('key');
+                _sessionContext.getKeyValue(_key, function (err, res){
                     if(err){
                         response.error(err);
                     }else{
-                        if(res.charAt(0)=='{'){
-                            var _session = JSON.parse(res||'{}');
-                            if(_session.expiresTime){
-                                var _expiresTime = new Date(_session.expiresTime);
-                                _session.expiresTimeString = _expiresTime.toLocaleDateString() + ' ' + _expiresTime.toLocaleTimeString();
+                        if(res){
+                            if(res.charAt(0)=='{'){
+                                var _session = JSON.parse(res||'{}');
+                                if(_session.expiresTime){
+                                    var _expiresTime = new Date(_session.expiresTime);
+                                    _session.expiresTimeString = _expiresTime.toLocaleDateString() + ' ' + _expiresTime.toLocaleTimeString();
+                                }
+                                response.success(_session);
+                            }else{
+                                response.success(res);
                             }
-                            response.success(_session);
                         }else{
-                            response.success(res);
+                            response.error('未找到key是"'+_key+'"的值。');
                         }
                     }
                 });
