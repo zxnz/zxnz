@@ -26,7 +26,7 @@
     "@zeanium/cli": "latest",
     "@zeanium/core": "latest",
     "@zeanium/database-mysql": "latest",
-    "@zeanium/http-server": "^1.5.2",
+    "@zeanium/http-server": "^1.5.3",
     "open": "^7.0.4",
     "redis": "^3.0.2"
   }
