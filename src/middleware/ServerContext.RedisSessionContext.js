@@ -124,8 +124,10 @@ module.exports = zn.SessionContext('ZNSession-Redis', {
                 expire: _expire,
                 session: session.getProps()
             });
-            this._redisClient.set(_key, session.serialize(), node_redis.print);
-            this._redisClient.expire(_key, _expire);
+            if(session.isNew){
+                this._redisClient.set(_key, session.serialize(), node_redis.print);
+                this._redisClient.expire(_key, _expire);
+            }
 
             return this;
         },
