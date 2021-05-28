@@ -1,6 +1,12 @@
 module.exports = zn.Controller('zxnz.database', {
     Service: require('./DataBaseService'),
     methods: {
+        getAllFunctions: {
+            method: 'GET/POST',
+            value: function (request, response, application, context, router){
+                
+            }
+        },
         getAllTables: {
             method: 'GET/POST',
             value: function (request, response, application, context, router){

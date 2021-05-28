@@ -117,6 +117,7 @@ module.exports = zn.Class({
                 this._server = zxnz.http.Server.createServer(_config);
                 this._server.uses(require('./src/middleware/index.js'));
                 this._server.start();
+                zxnz.server = this._server;
             } catch (err) {
                 zn.error(err);
             }
