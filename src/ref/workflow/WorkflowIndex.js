@@ -1,5 +1,10 @@
 module.exports = zxnz.ModelRef('zxnz_workflow_', {
     properties: {
+        parent_uuid: {
+            value: null,
+            type: ['varchar', 50],
+            default: ''
+        },
         schema_uuid: {
             value: null,
             type: ['varchar', 50],
@@ -17,8 +22,33 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Tags: {
             value: null,
-            type: ['varchar', 3000],
-            default: ""
+            type: ['varchar', 2000],
+            default: ","
+        },
+        Befores: {
+            value: null,
+            type: ['varchar', 2000],
+            default: ","
+        },
+        Afters: {
+            value: null,
+            type: ['varchar', 2000],
+            default: ","
+        },
+        Wechat_Notify_Enabled: {
+            value: null,
+            type: ['tinyint', 1],
+            default: 0
+        },
+        SMS_Notify_Enabled: {
+            value: null,
+            type: ['tinyint', 1],
+            default: 0
+        },
+        Email_Notify_Enabled: {
+            value: null,
+            type: ['tinyint', 1],
+            default: 0
         },
         Code_Format: {
             value: null,
