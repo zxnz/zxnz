@@ -6,6 +6,7 @@ module.exports = {
     WorkflowInstanceLog: require('./WorkflowInstanceLog'),
     WorkflowInstanceRemark: require('./WorkflowInstanceRemark'),
     WorkflowLog: require('./WorkflowLog'),
+    WorkflowRule: require('./WorkflowRule'),
     WorkflowSchema: require('./WorkflowSchema'),
     WorkflowSchemaTable: require('./WorkflowSchemaTable'),
     WorkflowSchemaTableField: require('./WorkflowSchemaTableField'),
