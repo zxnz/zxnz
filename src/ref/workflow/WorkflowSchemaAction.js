@@ -12,28 +12,28 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Type: {
             value: null,
-            type: ['varchar', 250],
+            type: ['varchar', 50],
             default: 'url'  //url, email, message, sms
         },
         Key: {
             value: null,
-            type: ['varchar', 250],
+            type: ['varchar', 100],
             default: ''
         },
         Value: {
             value: null,
-            type: ['varchar', 2500],
+            type: ['varchar', 2000],
             default: ''
         },
         Parameters: {
             value: null,
-            type: ['varchar', 2500],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Disabled: {
             value: null,
-            type: ['int', 11],
-            default: 1
+            type: ['tinyint', 1],
+            default: 0
         }
     }
 });

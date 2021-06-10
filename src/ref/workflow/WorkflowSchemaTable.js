@@ -12,17 +12,17 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Import_Enabled: {
             value: null,
-            type: ['int', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Export_Enabled: {
             value: null,
-            type: ['int', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Input_Enabled: {
             value: null,
-            type: ['int', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Table_Name: {
@@ -32,7 +32,7 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Generated: {
             value: null,
-            type: ['int', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Mixins: {

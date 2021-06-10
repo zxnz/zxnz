@@ -102,7 +102,7 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Required: {
             value: null,
-            type: ['int', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Hint: {
@@ -112,18 +112,13 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Data: {
             value: null,
-            type: ['varchar', 2000],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Props: {
             value: null,
-            type: ['varchar', 2000],
-            default: ''
-        },
-        Attrs: {
-            value: null,
-            type: ['varchar', 2000],
-            default: ''
+            type: ['text'],
+            default: null
         }
     }
 });

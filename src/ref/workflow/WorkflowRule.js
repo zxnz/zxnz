@@ -17,18 +17,18 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Value: {
             value: null,
-            type: ['varchar', 2500],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Parameters: {
             value: null,
-            type: ['varchar', 2500],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Disabled: {
             value: null,
-            type: ['int', 11],
-            default: 1
+            type: ['tinyint', 1],
+            default: 0
         }
     }
 });

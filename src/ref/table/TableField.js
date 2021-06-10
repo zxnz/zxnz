@@ -120,28 +120,23 @@ module.exports = zxnz.ModelRef('zxnz_table_field_', {
         },
         Data: {
             value: null,
-            type: ['varchar', 500],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Input_Props: {
             value: null,
-            type: ['varchar', 500],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Column_Props: {
             value: null,
-            type: ['varchar', 500],
-            default: ''
+            type: ['text'],
+            default: null
         },
         FormItem_Props: {
             value: null,
-            type: ['varchar', 500],
-            default: ''
-        },
-        Attrs: {
-            value: null,
-            type: ['varchar', 500],
-            default: ''
+            type: ['text'],
+            default: null
         }
     }
 });

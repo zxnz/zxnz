@@ -38,8 +38,8 @@ module.exports = zxnz.ModelRef('zxnz_tree_', {
         },
         Extend: {
             value: null,
-            type: ['varchar', 500],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Type: {
             value: null,

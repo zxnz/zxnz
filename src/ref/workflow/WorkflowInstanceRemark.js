@@ -12,13 +12,13 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Content: {
             value: null,
-            type: ['varchar', 5000],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Attachments: {
             value: null,
-            type: ['varchar', 5000],
-            default: ","
+            type: ['text'],
+            default: null
         }
     }
 });

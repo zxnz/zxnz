@@ -37,7 +37,7 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Is_Hidden: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             default: 0
         },
         Label: {
@@ -62,23 +62,18 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Required: {
             value: null,
-            type: ['int', 4],
+            type: ['tinyint', 1],
             default: 0
         },
         Data: {
             value: null,
-            type: ['varchar', 2000],
-            default: ''
+            type: ['text'],
+            default: null
         },
         Props: {
             value: null,
-            type: ['varchar', 2000],
-            default: ''
-        },
-        Attrs: {
-            value: null,
-            type: ['varchar', 2000],
-            default: ''
+            type: ['text'],
+            default: null
         }
     }
 });

@@ -65,10 +65,10 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 20],
             default: ''
         },
-        Attrs: {
+        Props: {
             value: null,
-            type: ['varchar', 3000],
-            default: ""
+            type: ['text'],
+            default: null
         }
     }
 });

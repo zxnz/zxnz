@@ -25,15 +25,20 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 50],
             default: ''
         },
+        do_users: {
+            value: null,
+            type: ['varchar', 1000],
+            default: ','
+        },
+        done_users: {
+            value: null,
+            type: ['varchar', 1000],
+            default: ','
+        },
         schema_uuid: {
             value: null,
             type: ['varchar', 50],
             default: ''
-        },
-        Schema_Form_Data: {
-            value: null,
-            type: ['varchar', 5000],
-            default: ""
         },
         Code: {
             value: null,
@@ -67,25 +72,15 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 10],
             default: ''
         },
-        Do_Users: {
-            value: null,
-            type: ['varchar', 250],
-            default: ','
-        },
         Closed: {
             value: null,
-            type: ['int', 11],
+            type: ['tinyint', 1],
             default: 0
         },
         State: {
             value: null,
-            type: ['int', 11],
-            default: 1
-        },
-        Owners: {
-            value: null,
-            type: ['varchar', 2000],
-            default: ','
+            type: ['tinyint', 1],
+            default: 0
         },
         Url: {
             value: null,
@@ -97,15 +92,15 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 20],
             default: ''
         },
-        Attrs: {
+        Props: {
             value: null,
-            type: ['varchar', 3000],
-            default: ""
+            type: ['text'],
+            default: null
         },
         Files: {
             value: null,
-            type: ['varchar', 5000],
-            default: ","
+            type: ['text'],
+            default: null
         }
     }
 });

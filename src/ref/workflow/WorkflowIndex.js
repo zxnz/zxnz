@@ -67,13 +67,13 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
         },
         Json_Schema: {
             value: null,
-            type: ['varchar', 3000],
-            default: ""
+            type: ['text'],
+            default: null
         },
         Xml_Schema: {
             value: null,
-            type: ['varchar', 3000],
-            default: ''
+            type: ['text'],
+            default: null
         }
     }
 });
