@@ -30,6 +30,9 @@ module.exports = zxnz.SqlBlock({
                     where: {
                         zxnz_tree_Pid: pid
                     },
+                    order: {
+                        zxnz_tree_Order: 'asc'
+                    },
                     filter: true
                 }));
         },

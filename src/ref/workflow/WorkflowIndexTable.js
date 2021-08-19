@@ -30,6 +30,11 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 100],
             default: ''
         },
+        Enabled: {
+            value: null,
+            type: ['tinyint', 1],
+            default: 0
+        },
         Generated: {
             value: null,
             type: ['tinyint', 1],

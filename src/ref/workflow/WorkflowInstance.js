@@ -45,6 +45,11 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 50],
             default: ''
         },
+        Submit_Time: {
+            value: null,
+            type: ['datetime'],
+            default: null
+        },
         Previous: {
             value: null,
             type: ['varchar', 50],
