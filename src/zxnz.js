@@ -114,6 +114,16 @@ var zxnz = {
         
         return _value;
     },
+    appendPath: function (data, prefixPath) {
+        var _data = data;
+        if(prefixPath && zn.is(_data, 'object')){
+            for(var key in _data){
+                _data[prefixPath + '.' + key] = _data[key];
+            }
+        }
+
+        return _data;
+    },
     resolve: function (paths, includeParentPath){
         return __.resolve(paths, includeParentPath);
     }
