@@ -1,5 +1,6 @@
 var Controllers = require('./application.controller/index');
 module.exports = zn.Middleware.Application({
+    reset: false,
     methods: {
         initial: function (application, config, serverContext){
             if(config.databases){

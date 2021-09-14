@@ -1,8 +1,6 @@
-/**
- * Created by yangyxu on 9/17/14.
- */
+var refSqlMetas = require('./ref/zxnz.sql.js');
 module.exports = zn.Class({
-    static: true,
+    events: [ 'onSqlBuilderCreate', 'onZxnzSqlCreate' ],
     properties: {
         databases: {
             readonly: true,
@@ -15,12 +13,6 @@ module.exports = zn.Class({
             get: function (){
                 return this._database;
             }
-        },
-        sql: {
-            readonly: true,
-            get: function (){
-                return this._database?this._database.Builder:null;
-            }
         }
     },
     methods: {
@@ -28,20 +20,40 @@ module.exports = zn.Class({
             this._database = null;
             this._databases = {};
         },
+        createSql: function (session, database){
+            return this.createSqlBuilder(session, database);
+        },
+        createSqlBuilder: function (session, database){
+            var _database = database || this._database;
+            if(!_database || !_database.createSqlBuilder) {
+                throw new Error('database or database.getSqlBuilder is null.');
+            }
+            var _sqlBuilder = _database.createSqlBuilder(session);
+            _sqlBuilder.loadMetas(refSqlMetas);
+
+            this.fire('onSqlBuilderCreate', _sqlBuilder);
+
+            return _sqlBuilder;
+        },
         registerDataBases: function (databases, events){
             switch(zn.type(databases)){
                 case 'array':
-                    return databases.map((database)=>this.registerDataBase(database, events));
+                    for(var database of databases) {
+                        this.registerDataBase(database, events);
+                    }
+                    break;
                 case 'object':
-                    return this.registerDataBase(databases, events);
+                    this.registerDataBase(databases, events);
             }
         },
         registerDataBase: function (config, events){
-            var _config = Object.assign({}, config);
+            var _config = config || {};
             var _name = _config.name || _config.database;
-            var _database = zxnz.require(_config.modules);
-            //zn.debug('database config: ', _config);
-            _database.connector = new _database.Connector(_config, events);
+            var _modules = _config.modules.slice(0);
+            var _database = zxnz.require(_modules);
+            if(_database.createConnector && typeof _database.createConnector == 'function') {
+                _database.connector = _database.createConnector(_config, events);
+            }
             if(_config.default){
                 this.setCurrentDataBase(_database);
             }
@@ -50,8 +62,11 @@ module.exports = zn.Class({
         },
         setCurrentDataBase: function (database){
             this._database = database;
-            zxnz.sql = database.Builder;
-            require('./ref/zxnz.sql.js');
+            zxnz.database = database;
+            zxnz.connector = database.connector;
+            zxnz.sql = this.createSqlBuilder();
+
+            this.fire('onZxnzSqlCreate', zxnz.sql);
         },
         getDataBase: function (name){
             if(name){

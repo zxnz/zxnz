@@ -5,15 +5,15 @@
 module.exports = zxnz.Dao({
     SqlBlock: require('./TreeSqlBlock'),
     methods: {
-        addNode: function (values){
+        addNode: function (values, session){
             return this.beginPoolTransaction()
-                .block(this.sqlBlock.addNode(values))
+                .block(this.sqlBlock.addNode(values, session))
                 .commit();
         },
-        addNodeByPid: function (pid, values){
+        addNodeByPid: function (pid, values, session){
             values.zxnz_tree_Pid = pid;
             return this.beginPoolTransaction()
-                .block(this.sqlBlock.addNode(values))
+                .block(this.sqlBlock.addNode(values, session))
                 .commit();
         },
         editNodeById: function (data, id){
@@ -21,19 +21,19 @@ module.exports = zxnz.Dao({
                 .block(this.sqlBlock.editNodeById(data, id))
                 .commit();
         },
-        selectChild: function (argv){
+        selectChild: function (argv, session){
             return this.beginPoolTransaction()
-                .block(this.sqlBlock.selectChild(argv))
+                .block(this.sqlBlock.selectChild(argv, session))
                 .commit();
         },
-        selectChildByPid: function (pid){
+        selectChildByPid: function (pid, session){
             return this.beginPoolTransaction()
-                .block(this.sqlBlock.selectChildByPid(pid))
+                .block(this.sqlBlock.selectChildByPid(pid, session))
                 .commit();
         },
-        selectAllChildByPid: function (pid){
+        selectAllChildByPid: function (pid, session){
             return this.beginPoolTransaction()
-                .block(this.sqlBlock.selectAllChildByPid(pid))
+                .block(this.sqlBlock.selectAllChildByPid(pid, session))
                 .commit();
         },
         deleteNode: function (where){

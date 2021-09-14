@@ -2,7 +2,15 @@ var open = require('open');
 var ServerControllers = require('./server.controller/index.js');
 var RedisSessionContext = require('./ServerContext.RedisSessionContext');
 module.exports = zn.Middleware.ServerContext({
+    reset: false,
     methods: {
+        loaded: function (config, server, serverContext){
+            if(config.databases){
+                zxnz.store.registerDataBases(config.databases, {
+                    
+                });
+            }
+        },
         registerSessionContext: function (context) {
             if(!context.sessionContext){
                 if(context.config.session && context.config.session.redis) {

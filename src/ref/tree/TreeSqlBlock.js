@@ -12,43 +12,45 @@ module.exports = zxnz.SqlBlock({
                     updates: data,
                     where: {
                         zxnz_ID: id
-                    },
-                    filter: true
+                    }
                 }));
         },
-        selectChild: function (argv){
+        selectChild: function (argv, session){
             return this.createTransactionBlock()
                 .query(zxnz.sql.select(zn.extend({
-                    table: this._table,
-                    filter: true
+                    session: session,
+                    filterMerchant: false,
+                    table: this._table
                 }, argv)));
         },
-        selectChildByPid: function (pid){
+        selectChildByPid: function (pid, session){
             return this.createTransactionBlock()
                 .query(zxnz.sql.select({
+                    session: session,
+                    filterMerchant: false,
                     table: this._table,
                     where: {
                         zxnz_tree_Pid: pid
                     },
                     order: {
                         zxnz_tree_Order: 'asc'
-                    },
-                    filter: true
+                    }
                 }));
         },
-        selectAllChildByPid: function (pid){
+        selectAllChildByPid: function (pid, session){
             return this.createTransactionBlock()
                 .query(zxnz.sql.select({
+                    session: session,
+                    filterMerchant: false,
                     table: this._table,
-                    where: "locate('," + pid +",', zxnz_tree_Parent_Path)<>0",
-                    filter: true
+                    where: "locate('," + pid +",', zxnz_tree_Parent_Path)<>0"
                 }));
         },
-        addNodeByPid: function (pid, data){
+        addNodeByPid: function (pid, data, session){
             data.zxnz_tree_Pid = pid;
-            return this.addNode(data);
+            return this.addNode(data, session);
         },
-        addNode: function (model){
+        addNode: function (model, session){
             var table = this._table;
             if(typeof model == 'string'){
                 model = JSON.parse(model);
@@ -62,8 +64,7 @@ module.exports = zxnz.SqlBlock({
                         fields: TREE_FIELDS,
                         where: {
                             zxnz_ID: _pid
-                        },
-                        filter: true
+                        }
                     }),
                     zxnz.sql.select({
                         table: table,
@@ -71,8 +72,7 @@ module.exports = zxnz.SqlBlock({
                         where: {
                             zxnz_Deleted: 0,
                             zxnz_tree_Pid: _pid
-                        },
-                        filter: true
+                        }
                     })
                 ])
                 .query('Insert node && Update parent node', function (sql, rows, fields){
@@ -93,17 +93,16 @@ module.exports = zxnz.SqlBlock({
 
                     return [
                         zxnz.sql.insert({
+                            session: session,
                             table: table,
-                            values: model,
-                            filter: true
+                            values: model
                         }),
                         zxnz.sql.update({
                             table: table,
                             updates: 'zxnz_tree_Son_Count=zxnz_tree_Son_Count+1',
                             where: {
                                 zxnz_ID: _pid
-                            },
-                            filter: true
+                            }
                         })
                     ];
                 });
@@ -114,8 +113,7 @@ module.exports = zxnz.SqlBlock({
                 .query(zxnz.sql.select({
                     table: table,
                     fields: TREE_FIELDS,
-                    where: where,
-                    filter: true
+                    where: where
                 }))
                 .query('delete', function (sql, rows, fields, tran){
                     var _model = rows[0];
@@ -142,8 +140,7 @@ module.exports = zxnz.SqlBlock({
                     fields: TREE_FIELDS,
                     where: {
                         zxnz_ID: pid
-                    },
-                    filter: true
+                    }
                 }))
                 .query('deleteChildByPid: ', function (sql, rows, fields, tran){
                     var _model = rows[0];
@@ -169,8 +166,7 @@ module.exports = zxnz.SqlBlock({
                     fields: TREE_FIELDS,
                     where: {
                         zxnz_ID: pid
-                    },
-                    filter: true
+                    }
                 }))
                 .query('deleteAllChildByPid: ', function (sql, rows, fields, tran){
                     var _model = rows[0];
@@ -226,20 +222,17 @@ module.exports = zxnz.SqlBlock({
                     zxnz.sql.select({
                         table: table,
                         fields: TREE_FIELDS,
-                        where: { zxnz_ID: source },
-                        filter: true
+                        where: { zxnz_ID: source }
                     }),
                     zxnz.sql.select({
                         table: table,
                         fields: TREE_FIELDS,
-                        where: { zxnz_ID: target },
-                        filter: true
+                        where: { zxnz_ID: target }
                     }),
                     zxnz.sql.select({
                         table: table,
                         fields: "max(zxnz_tree_Order) as target_max_zxnz_tree_Order",
-                        where: { zxnz_tree_Pid: target },
-                        filter: true
+                        where: { zxnz_tree_Pid: target }
                     })
                 ])
                 .query('order', function (sql, rows, fields){
@@ -254,8 +247,7 @@ module.exports = zxnz.SqlBlock({
                                 updates: "zxnz_tree_Son_Count=zxnz_tree_Son_Count-1",
                                 where: {
                                     zxnz_ID: _source.zxnz_tree_Pid
-                                },
-                                filter: true
+                                }
                             }),
                             zxnz.sql.update({
                                 table: table,
@@ -267,14 +259,12 @@ module.exports = zxnz.SqlBlock({
                                 },
                                 where: {
                                     zxnz_ID: _source.zxnz_ID
-                                },
-                                filter: true
+                                }
                             }),
                             zxnz.sql.update({
                                 table: table,
                                 updates: "zxnz_tree_Order = zxnz_tree_Order - 1",
-                                where: "zxnz_tree_Pid = " + _source.zxnz_tree_Pid + " and zxnz_tree_Order > " + _source.zxnz_tree_Order,
-                                filter: true
+                                where: "zxnz_tree_Pid = " + _source.zxnz_tree_Pid + " and zxnz_tree_Order > " + _source.zxnz_tree_Order
                             })
                         ];
                     }
@@ -297,8 +287,7 @@ module.exports = zxnz.SqlBlock({
                             updates: "zxnz_tree_Son_Count=zxnz_tree_Son_Count-1",
                             where: {
                                 zxnz_ID: _source.zxnz_tree_Pid
-                            },
-                            filter: true
+                            }
                         }),
                         zxnz.sql.update({
                             table: table,
@@ -310,8 +299,7 @@ module.exports = zxnz.SqlBlock({
                             },
                             where: {
                                 zxnz_ID: _source.zxnz_ID
-                            },
-                            filter: true
+                            }
                         }),
                         zxnz.sql.update({
                             table: table,
@@ -320,20 +308,17 @@ module.exports = zxnz.SqlBlock({
                             },
                             where: {
                                 zxnz_ID: _target.zxnz_ID
-                            },
-                            filter: true
+                            }
                         }),
                         zxnz.sql.update({
                             table: table,
                             updates: "zxnz_tree_Order = zxnz_tree_Order - 1",
-                            where: "zxnz_tree_Pid = " + _source.zxnz_tree_Pid + " and zxnz_tree_Order > " + _source.zxnz_tree_Order,
-                            filter: true
+                            where: "zxnz_tree_Pid = " + _source.zxnz_tree_Pid + " and zxnz_tree_Order > " + _source.zxnz_tree_Order
                         }),
                         zxnz.sql.update({
                             table: table,
                             updates: "zxnz_tree_Parent_Path=replace(zxnz_tree_Parent_Path, '"+_source.zxnz_tree_Parent_Path+"', '"+_target.zxnz_tree_Parent_Path + _target.zxnz_ID + ",')",
-                            where: "locate('"+_source.zxnz_tree_Parent_Path + _source.zxnz_ID +"', zxnz_tree_Parent_Path)<>0",
-                            filter: true
+                            where: "locate('"+_source.zxnz_tree_Parent_Path + _source.zxnz_ID +"', zxnz_tree_Parent_Path)<>0"
                         })
                     ];
                 });

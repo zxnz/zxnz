@@ -1,3 +1,4 @@
+var Store = require('./Store');
 var node_path = require('path'),
     node_fs = require('fs'),
     __slice = Array.prototype.slice;
@@ -93,6 +94,16 @@ var zxnz = {
     app: {},
     plugin: {},
     module: {},
+    store: new Store(),
+    JSONWriter: require('./JSONWriter'),
+    resolveModelsTables: function (Models){
+        var _tables = {};
+        for(var _key in Models) {
+            _tables[_key] = Models[_key].getTable();
+        }
+
+        return _tables;
+    },
     require: function (){
         var _argv = __slice.call(arguments);
         if(_argv.length == 1 && zn.is(_argv[0], 'array')){
@@ -158,8 +169,5 @@ if(!global.zn){
         zxnz.require('zeanium', '@zeanium/core');
     }
 }
-
-zxnz.JSONWriter = require('./JSONWriter');
-zxnz.store = require('./zxnz.store.js');
 
 module.exports = global.zxnz = zxnz;

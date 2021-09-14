@@ -3,6 +3,7 @@
  */
 var node_redis = require('redis');
 module.exports = zn.SessionContext('ZNSession-Redis', {
+    reset: false,
     properties: {
         redisClient: null
     },

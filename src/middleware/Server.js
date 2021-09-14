@@ -1,11 +1,8 @@
 module.exports = zn.Middleware.Server({
+    reset: false,
     methods: {
         started: function (config, server){
-            if(config.databases){
-                zxnz.store.registerDataBases(config.databases, {
-                    
-                });
-            }
+            
         }
     }
 });

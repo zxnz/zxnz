@@ -75,7 +75,7 @@ module.exports = zn.Controller('zxnz.tree.table', {
                 var _sqlBlock = new zxnz.ref.TreeSqlBlock(_table, zxnz.store);
                 zxnz.store
                     .beginPoolTransaction()
-                    .block(_sqlBlock.addNode(request.getJSON('data')))
+                    .block(_sqlBlock.addNode(request.getJSON('data'), session))
                     .commit()
                     .then(function (data){
                         response.success(data);
@@ -96,7 +96,7 @@ module.exports = zn.Controller('zxnz.tree.table', {
                 var _sqlBlock = new zxnz.ref.TreeSqlBlock(_table, zxnz.store);
                 zxnz.store
                     .beginPoolTransaction()
-                    .block(_sqlBlock.addNodeByPid(request.getValue('pid'), request.getJSON('data')))
+                    .block(_sqlBlock.addNodeByPid(request.getValue('pid'), request.getJSON('data'), session))
                     .commit()
                     .then(function (data){
                         response.success(data);
@@ -176,7 +176,7 @@ module.exports = zn.Controller('zxnz.tree.table', {
                 var _sqlBlock = new zxnz.ref.TreeSqlBlock(_table, zxnz.store);
                 zxnz.store
                     .beginPoolTransaction()
-                    .block(_sqlBlock.selectChild(request.getValue()))
+                    .block(_sqlBlock.selectChild(request.getValue(), session))
                     .commit()
                     .then(function (data){
                         response.success(data);
@@ -196,7 +196,7 @@ module.exports = zn.Controller('zxnz.tree.table', {
                 var _sqlBlock = new zxnz.ref.TreeSqlBlock(_table, zxnz.store);
                 zxnz.store
                     .beginPoolTransaction()
-                    .block(_sqlBlock.selectChildByPid(request.getValue('pid')))
+                    .block(_sqlBlock.selectChildByPid(request.getValue('pid'), session))
                     .commit()
                     .then(function (data){
                         response.success(data);
@@ -216,7 +216,7 @@ module.exports = zn.Controller('zxnz.tree.table', {
                 var _sqlBlock = new zxnz.ref.TreeSqlBlock(_table, zxnz.store);
                 zxnz.store
                     .beginPoolTransaction()
-                    .block(_sqlBlock.selectAllChildByPid(request.getValue('pid')))
+                    .block(_sqlBlock.selectAllChildByPid(request.getValue('pid'), session))
                     .commit()
                     .then(function (data){
                         response.success(data);

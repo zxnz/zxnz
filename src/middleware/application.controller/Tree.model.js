@@ -77,7 +77,7 @@ module.exports = zn.Controller('zxnz.tree.model', {
                 }
 
                 var _dao = _Model.createDao();
-                _dao.addNode(request.getJSON('data')).then(function (data){
+                _dao.addNode(request.getJSON('data'), session).then(function (data){
                     response.success(data);
                 }, function (err){
                     response.error(err);
@@ -98,7 +98,7 @@ module.exports = zn.Controller('zxnz.tree.model', {
                 }
 
                 var _dao = _Model.createDao();
-                _dao.addNodeByPid(request.getValue('pid'), request.getJSON('data')).then(function (data){
+                _dao.addNodeByPid(request.getValue('pid'), request.getJSON('data'), session).then(function (data){
                     response.success(data);
                 }, function (err){
                     response.error(err);
@@ -178,7 +178,7 @@ module.exports = zn.Controller('zxnz.tree.model', {
                 }
 
                 var _dao = _Model.createDao();
-                _dao.selectChild(request.getValue()).then(function (data){
+                _dao.selectChild(request.getValue(), session).then(function (data){
                     response.success(data);
                 }, function (err){
                     response.error(err);
@@ -198,7 +198,7 @@ module.exports = zn.Controller('zxnz.tree.model', {
                 }
 
                 var _dao = _Model.createDao();
-                _dao.selectChildByPid(request.getValue('pid')).then(function (data){
+                _dao.selectChildByPid(request.getValue('pid'), session).then(function (data){
                     response.success(data);
                 }, function (err){
                     response.error(err);
@@ -218,7 +218,7 @@ module.exports = zn.Controller('zxnz.tree.model', {
                 }
 
                 var _dao = _Model.createDao();
-                _dao.selectAllChildByPid(request.getValue('pid')).then(function (data){
+                _dao.selectAllChildByPid(request.getValue('pid'), session).then(function (data){
                     response.success(data);
                 }, function (err){
                     response.error(err);
