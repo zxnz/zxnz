@@ -35,6 +35,11 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             type: ['varchar', 2000],
             default: ","
         },
+        Cancels: {
+            value: null,
+            type: ['varchar', 2000],
+            default: ","
+        },
         Enabled: {
             value: null,
             type: ['tinyint', 1],
@@ -54,6 +59,33 @@ module.exports = zxnz.ModelRef('zxnz_workflow_', {
             value: null,
             type: ['tinyint', 1],
             default: 0
+        },
+        Deputy_Add_Enabled: {
+            value: null,
+            type: ['tinyint', 1],
+            default: 0
+        },
+        Deputy_Add_Rule: {
+            type: ['varchar', 50],
+            default: ""
+        },
+        Deputy_Delete_Enabled: {
+            value: null,
+            type: ['tinyint', 1],
+            default: 0
+        },
+        Deputy_Delete_Rule: {
+            type: ['varchar', 50],
+            default: ""
+        },
+        Deputy_Update_Enabled: {
+            value: null,
+            type: ['tinyint', 1],
+            default: 0
+        },
+        Deputy_Update_Rule: {
+            type: ['varchar', 50],
+            default: ""
         },
         Code_Format: {
             value: null,
