@@ -49,7 +49,7 @@ module.exports = zn.Class({
         registerDataBase: function (config, events){
             var _config = config || {};
             var _name = _config.name || _config.database;
-            var _modules = _config.modules.slice(0);
+            var _modules = (_config.modules||[]).slice(0);
             var _database = zxnz.require(_modules);
             if(_database.createConnector && typeof _database.createConnector == 'function') {
                 _database.connector = _database.createConnector(_config, events);
