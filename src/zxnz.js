@@ -67,7 +67,7 @@ var __ = {
             _resolvePaths = [],
             _cwd = process.cwd(),
             _curr_node_path = node_path.resolve(_cwd, 'node_modules'),
-            _env_node_path = process.env.NODE_PATH || '';
+            _env_node_paths = zn.NODE_PATHS || (process.env.NODE_PATH || '').split(node_path.delimiter);
         
         paths.forEach(function (path){
             _path = node_path.resolve(_cwd, path);
@@ -77,9 +77,11 @@ var __ = {
             }
         });
 
-        _resolvePaths.unshift(_curr_node_path);
-        if(_env_node_path){
-            _resolvePaths.push(_env_node_path);
+        if(_env_node_paths.length){
+            _resolvePaths = _resolvePaths.concat(_env_node_paths);
+        }
+        if(_resolvePaths.indexOf(_curr_node_path) == -1) {
+            _resolvePaths.push(_curr_node_path);
         }
 
         process.env.NODE_PATH = _resolvePaths.join(node_path.delimiter);
@@ -154,6 +156,14 @@ if(_argv.mode){
 
 if(_argv.node_path) {
     __.resolve(_argv.node_path, true);
+}
+
+if(_argv.zxnz_path){
+    __.resolve(_argv.zxnz_path, false);
+}
+
+if(_argv.server_path){
+    __.resolve(_argv.server_path, false);
 }
 
 if(_config.node_path) {
