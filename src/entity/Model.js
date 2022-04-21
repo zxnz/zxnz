@@ -280,7 +280,11 @@ zxnz.Model = function (){
         }
     }
 
-    return zn.Class(Model, (zxnz.http.Middleware.callMiddlewareMethod(zxnz.http.Middleware.TYPES.MODEL, "define", [_meta]) || _meta));
+    if(zxnz.http && zxnz.http.Middleware) {
+        _meta = zxnz.http.Middleware.callMiddlewareMethod(zxnz.http.Middleware.TYPES.MODEL, "define", [_meta]) || _meta;
+    }
+
+    return zn.Class(Model, _meta);
 }
 
 module.exports = Model;

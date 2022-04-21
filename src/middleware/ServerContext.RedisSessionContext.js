@@ -5,10 +5,11 @@ var node_redis = require('redis');
 module.exports = zn.SessionContext('ZNSession-Redis', {
     reset: false,
     properties: {
+        connected: false,
         redisClient: null
     },
     methods: {
-        init: function (config, serverContext){
+        init: async function (config, serverContext){
             try {
                 config.retry_strategy = function(options) {
                     if (options.error && options.error.code === "ECONNREFUSED") {
@@ -28,30 +29,37 @@ module.exports = zn.SessionContext('ZNSession-Redis', {
                     // reconnect after
                     return Math.min(options.attempt * 100, 3000);
                 };
+                config.legacyMode = true;
                 var _client = this._redisClient = node_redis.createClient(config);
-                _client.select(0, function (err, res){
+                //await _client.connect();
+                _client.select(0, (err, res)=>{
                     if(err){
                         return false;
                     }else{
                         zn.trace('Redis Session Context Connect DB0 Success.');
                     }
                 });
-                _client.on('error', function (err){
-                    zn.error('Redis Session Context Client Error.', err);
+                
+                _client.on('message', (channel, key)=>{
+                    zn.error('Redis Session Context Client Message: ', channel, key);
                 });
-                _client.on('ready', function (){
+
+                _client.on('error', (err)=>{
+                    zn.error('Redis Session Context Client Error.', err.message);
+                });
+                _client.on('ready', ()=>{
                     zn.info('Redis Session Context Client Ready.');
                 });
-                _client.on('connect', function (){
+                _client.on('connect', ()=>{
                     zn.info('Redis Session Context Client Connect.');
                 });
-                _client.on('reconnecting', function (){
+                _client.on('reconnecting', ()=>{
                     zn.info('Redis Session Context Client Reconnecting.');
                 });
-                _client.on('end', function (){
+                _client.on('end', ()=>{
                     zn.error('Redis Session Context Client End.');
                 });
-                _client.on('warning', function (){
+                _client.on('warning', ()=>{
                     zn.warn('Redis Session Context Client Warning.');
                 });
                 //node_redis.debug_mode = true;
@@ -83,7 +91,7 @@ module.exports = zn.SessionContext('ZNSession-Redis', {
             return this.getSessionByKey(_data.data, success, error);
         },
         getSessionByKey: function (sessionKey, success, error){
-            zn.debug('RedisSessionContext sessionKey: ', sessionKey);
+            zn.debug('RedisSessionContext sessionKey: ', sessionKey, this._redisClient);
             return this._redisClient.get(sessionKey, function (err, value){
                 if(err) {
                     return error && error(err);
