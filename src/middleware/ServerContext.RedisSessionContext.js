@@ -91,7 +91,7 @@ module.exports = zn.SessionContext('ZNSession-Redis', {
             return this.getSessionByKey(_data.data, success, error);
         },
         getSessionByKey: function (sessionKey, success, error){
-            zn.debug('RedisSessionContext sessionKey: ', sessionKey, this._redisClient);
+            zn.debug('RedisSessionContext sessionKey: ', sessionKey);
             return this._redisClient.get(sessionKey, function (err, value){
                 if(err) {
                     return error && error(err);
