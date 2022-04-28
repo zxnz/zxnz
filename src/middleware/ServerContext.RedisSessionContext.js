@@ -119,21 +119,20 @@ module.exports = zn.SessionContext('ZNSession-Redis', {
 
             return this._redisClient.expire(session.getKey(), -1), this;
         },
-        saveSession: function (session){
+        saveSession: function (session, callback){
             var _key = session.getKey(),
                 _expire = this._config.expire || 60 * 60 * 24;
             if(!_key){
                 return zn.error('Session key is not exist!'), this;
             }
-
-            /*
+            
             zn.info('save session (redis): ', {
                 key: _key,
                 createdTime: session._createdTime,
                 expiresTime: session._expiresTime,
                 expire: _expire,
                 session: session.getProps()
-            });*/
+            });
             this._redisClient.set(_key, session.serialize(), node_redis.print);
             if(session.isNew){
                 this._redisClient.expire(_key, _expire);
