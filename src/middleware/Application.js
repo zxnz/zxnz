@@ -14,7 +14,7 @@ module.exports = zn.Middleware.Application({
             var _config = zn.extend({}, application._config, application._serverContext._config),
                 _mode = _config.mode || process.env.NODE_ENV;
             zn.debug('mode: ', _mode)
-            if(_mode == 'development'){
+            if(_mode == 'development' || _config.debug){
                 Controllers.forEach(function (Controller){
                     controllers[Controller.getMeta('controller')] = Controller;
                 });
