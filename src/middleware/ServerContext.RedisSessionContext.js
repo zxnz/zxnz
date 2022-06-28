@@ -126,6 +126,7 @@ module.exports = zn.SessionContext('ZNSession-Redis', {
                 return zn.error('Session key is not exist!'), this;
             }
             
+            /*
             zn.info('save session (redis): ', {
                 key: _key,
                 createdTime: session._createdTime,
@@ -133,6 +134,7 @@ module.exports = zn.SessionContext('ZNSession-Redis', {
                 expire: _expire,
                 session: session.getProps()
             });
+            */
             this._redisClient.set(_key, session.serialize(), node_redis.print);
             if(session.isNew){
                 this._redisClient.expire(_key, _expire);

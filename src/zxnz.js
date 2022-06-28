@@ -1,6 +1,6 @@
 var Store = require('./Store');
-var node_path = require('path'),
-    node_fs = require('fs'),
+var node_fs = require('fs'),
+    node_path = require('path'),
     __slice = Array.prototype.slice;
 
 var __ = {
@@ -97,6 +97,8 @@ var zxnz = {
     plugin: {},
     module: {},
     store: new Store(),
+    file: require('./File'),
+    crypot: require('./Crypto'),
     JSONWriter: require('./JSONWriter'),
     resolveModelsTables: function (Models){
         var _tables = {};

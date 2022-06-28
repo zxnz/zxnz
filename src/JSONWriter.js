@@ -1,6 +1,5 @@
-var node_path = require('path');
 var node_fs = require('fs');
-var _slice = Array.prototype.slice;
+var node_path = require('path');
 
 module.exports = zn.Class({
     properties: {
