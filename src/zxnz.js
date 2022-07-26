@@ -98,8 +98,17 @@ var zxnz = {
     module: {},
     store: new Store(),
     file: require('./File'),
+    excel: require('./Excel'),
     crypot: require('./Crypto'),
+    snowflake: require('./Snowflake'),
     JSONWriter: require('./JSONWriter'),
+    resolveObjectValueFromKeys: function (obj, keys){
+        for(var key of keys) {
+            if(obj[key] != null){
+                return obj[key];
+            }
+        }
+    },
     resolveModelsTables: function (Models){
         var _tables = {};
         for(var _key in Models) {
