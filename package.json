@@ -1,6 +1,6 @@
 {
   "name": "zxnz",
-  "version": "1.7.11",
+  "version": "1.7.12",
   "description": "Zxnz is simple http server and custome your business.",
   "main": "index.js",
   "repository": {
