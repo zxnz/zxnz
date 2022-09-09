@@ -26,7 +26,7 @@
     "@zeanium/cli": "1.0.12",
     "@zeanium/core": "1.3.5",
     "@zeanium/database-mysql": "1.3.1",
-    "@zeanium/http-server": "1.7.5",
+    "@zeanium/http-server": "1.7.7",
     "bluebird": "^3.7.2",
     "officegen": "^0.6.5",
     "open": "^8.4.0",

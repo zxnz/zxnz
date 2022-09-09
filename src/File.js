@@ -74,6 +74,14 @@ module.exports = zn.Class({
                 });
             }
         },
+        eachdir: function (path, callback){
+            if(node_fs.existsSync(path)){
+                var _dir = node_fs.readdirSync(path, { withFileTypes: true });
+                _dir.forEach((dirent)=>{
+                    callback && callback(dirent, node_path.resolve(path, dirent.name));
+                });
+            }
+        },
         mkdir: function (dir){
             if(dir && !node_fs.existsSync(dir)){
                 node_fs.mkdirSync(dir, { recursive: true });
