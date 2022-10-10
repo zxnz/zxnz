@@ -33,17 +33,17 @@ module.exports = zxnz.ModelRef('zxnz_constant_', {
         Column_Props: {
             value: null,
             type: ['varchar', 500],
-            default: '{}'
+            default: ''
         },
         Input_Props: {
             value: null,
             type: ['varchar', 500],
-            default: '{}'
+            default: ''
         },
         FormItem_Props: {
             value: null,
             type: ['varchar', 500],
-            default: '{}'
+            default: ''
         }
     }
 });
