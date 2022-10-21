@@ -1,3 +1,4 @@
+var zeanium_mysql = require("@zeanium/database-mysql");
 var Store = require('./Store');
 var node_fs = require('fs'),
     node_path = require('path'),
@@ -96,12 +97,14 @@ var zxnz = {
     app: {},
     plugin: {},
     module: {},
+    sql: zeanium_mysql.createSqlBuilder(),
     store: new Store(),
     file: require('./File'),
     excel: require('./Excel'),
     crypot: require('./Crypto'),
     snowflake: require('./Snowflake'),
     JSONWriter: require('./JSONWriter'),
+    MysqlClient: require('./MysqlClient'),
     resolveObjectValueFromKeys: function (obj, keys){
         for(var key of keys) {
             if(obj[key] != null){
