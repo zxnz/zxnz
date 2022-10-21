@@ -1,6 +1,6 @@
 {
   "name": "zxnz",
-  "version": "1.7.15",
+  "version": "1.7.16",
   "description": "Zxnz is simple http server and custome your business.",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,7 @@
   "dependencies": {
     "@zeanium/cli": "1.0.12",
     "@zeanium/core": "1.3.5",
-    "@zeanium/database-mysql": "1.3.2",
+    "@zeanium/database-mysql": "1.3.3",
     "@zeanium/http-server": "1.7.9",
     "bluebird": "^3.7.2",
     "officegen": "^0.6.5",
