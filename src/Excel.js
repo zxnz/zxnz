@@ -75,8 +75,11 @@ module.exports = zn.Class({
             for(var sheet of data) {
                 _sheet = _xlsx.makeNewSheet();
                 _sheet.name = sheet.name;
+                _columns = [];
+                _labels = []; 
+                _names = []; 
+                _data = [];
                 if(zn.is(sheet.columns, 'object')){
-                    _columns = [];
                     for(var key in sheet.columns) {
                         _columns.push({
                             label: key,
@@ -84,7 +87,7 @@ module.exports = zn.Class({
                         });
                     }
                 }else if(zn.is(_columns, 'array')){
-                    _columns = sheet.columns;
+                    _columns = sheet.columns.slice(0);
                 }
                 for(var column of _columns){
                     _labels.push(column.label);
@@ -93,20 +96,25 @@ module.exports = zn.Class({
                 _sheet.data[0] = _labels;
                 for(item of sheet.data) {
                     _data = [];
-                    for(var name of _names){
-                        _value = '';
-                        switch(zn.type(name)) {
-                            case 'string':
-                                _value = item[name];
-                                break;
-                            case 'array':
-                                _value = zxnz.resolveObjectValueFromKeys(item, name);
-                                break;
-                            case 'function':
-                                _value = name.call(null, item);
-                                break;
+                    if(zn.is(item, 'array')) {
+                        _data = item;
+                    }else if(zn.is(item, 'object')) {
+                        for(var name of _names){
+                            _value = '';
+                            switch(zn.type(name)) {
+                                case 'string':
+                                    _value = item[name];
+                                    break;
+                                case 'array':
+                                    _value = zxnz.resolveObjectValueFromKeys(item, name);
+                                    break;
+                                case 'function':
+                                    //_value = name.call(null, item, name, _value);
+                                    _value = name.call(null, item);
+                                    break;
+                            }
+                            _data.push(_value);
                         }
-                        _data.push(_value);
                     }
                     _return = callback && callback(_data, _names, item);
                     if(_return !== false){

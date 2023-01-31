@@ -5,17 +5,18 @@ var Dao = require('./Dao.js');
 var ModelSqlClass = require('./ModelSql.js');
 var __ = {
     __getPropertyCreateSql: function (property, context){
-        var _key = property.name,
-            _type = property.type || [],
-            _t1 = _type[0],
-            _t2 = _type[1],
-            _keys = [_key];
-
-        if(Object.prototype.toString.call(_t2) == '[object Array]'){
-            _t2 = _t2.join(',');
+        var _key = property.name, _keys = [_key],
+            _type = property.type || [];
+        if(zn.is(_type, 'array')) {
+            var _t1 = _type[0], _t2 = _type[1];
+            if(Object.prototype.toString.call(_t2) == '[object Array]'){
+                _t2 = _t2.join(',');
+            }
+    
+            _keys.push(_t1+(_t2?'('+_t2+')':''));
+        } else if (zn.is(_type, 'string')) {
+            _keys.push(_type);
         }
-
-        _keys.push(_t1+(_t2?'('+_t2+')':''));
 
         if(property.primary){
             property.notNull = true;
@@ -46,30 +47,38 @@ var __ = {
             if(zn.is(_value, 'function')){
                 _value = _value.call(context, property, property.name);
             }
-
-            switch(property.type[0].toLowerCase()){
-                case 'nvarchar':
-                case 'varchar':
-                case 'longtext':
-                case 'char':
-                    _value = _value || '';
-                    if(zn.is(_value, 'string')){
-                        if(_value.indexOf('{') === 0 && _value.indexOf('}') === (_value.length-1)){
-                            _value = _value.substring(1, _value.length-1);
-                        }else {
-                            _value = "'" + _value + "'";
+            if(zn.is(property.type, 'array')) {
+                switch(property.type[0].toLowerCase()){
+                    case 'nvarchar':
+                    case 'varchar':
+                    case 'longtext':
+                    case 'char':
+                        _value = _value || '';
+                        if(zn.is(_value, 'string')){
+                            if(_value.indexOf('{') === 0 && _value.indexOf('}') === (_value.length-1)){
+                                _value = _value.substring(1, _value.length-1);
+                            }else {
+                                _value = "'" + _value + "'";
+                            }
                         }
-                    }
-                    break;
-                case 'date':
-
-                    break;
-                case 'int':
-                    _value = _value==null?0:_value;
-                    break;
+                        break;
+                    case 'date':
+    
+                        break;
+                    case 'int':
+                        _value = _value==null?0:_value;
+                        break;
+                }
+            }
+            if(zn.is(_value, 'string') && _value.charAt(0) != "'" && _value.indexOf('()') == -1) {
+                _value = "'" + _value + "'";
             }
 
-            return 'DEFAULT '+_value;
+            if(zn.is(_value, 'string') && _value.indexOf('{') === 0 && _value.indexOf('}') === (_value.length-1)){
+                _value = _value.substring(1, _value.length-1);
+            }
+
+            return 'DEFAULT ' + _value;
         }
     }
 };

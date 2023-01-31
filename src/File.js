@@ -88,6 +88,9 @@ module.exports = zn.Class({
             }
         },
         checkFilePath: function (filePath){
+            if(node_fs.existsSync(filePath)) {
+                return true;
+            }
             if(filePath){
                 var _paths = filePath.split('/'), _dir = '/';
                 for(var path of _paths) {
