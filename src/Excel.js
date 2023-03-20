@@ -95,6 +95,10 @@ module.exports = zn.Class({
                 }
                 _sheet.data[0] = _labels;
                 for(item of sheet.data) {
+                    var _return = sheet.each && sheet.each(item, sheet);
+                    if(_return === false){
+                        continue;
+                    }
                     _data = [];
                     if(zn.is(item, 'array')) {
                         _data = item;
