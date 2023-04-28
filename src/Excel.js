@@ -40,11 +40,11 @@ module.exports = zn.Class({
     
             return _obj;
         },
-        loadRequestExcels: function (request, callback){
+        loadRequestExcels: function (request, file_callback, sheet_callback){
             var _arrayData = [], _objectData = {}, _file_data = [], _sheets = null;
             var _files = request.uploadFiles({}, ()=>{ });
             for(var _file of _files){
-                var _return  = callback && callback(_file);
+                var _return  = file_callback && file_callback(_file);
                 if(_return === false) {
                     continue;
                 }
@@ -52,6 +52,10 @@ module.exports = zn.Class({
                     _sheets = node_xlsx.readFile(_file.savedPath).Sheets;
                     for(var name in _sheets) {
                         _file_data = node_xlsx.utils.sheet_to_json(_sheets[name], { /*header: 1, raw: false*/ });
+                        var _return  = sheet_callback && sheet_callback(_file_data, name, _sheets[name]);
+                        if(_return === false) {
+                            continue;
+                        }
                         _objectData[name] = _file_data;
                         if(zn.is(_file_data, 'array')){
                             _arrayData = _arrayData.concat(_file_data);
@@ -116,6 +120,9 @@ module.exports = zn.Class({
                                     //_value = name.call(null, item, name, _value);
                                     _value = name.call(null, item);
                                     break;
+                            }
+                            if(_value == null) {
+                                _value = '';
                             }
                             _data.push(_value);
                         }
