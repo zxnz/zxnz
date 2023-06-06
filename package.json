@@ -1,6 +1,6 @@
 {
   "name": "zxnz",
-  "version": "1.7.23",
+  "version": "1.7.24",
   "description": "Zxnz is simple http server and custome your business.",
   "main": "index.js",
   "repository": {
@@ -29,7 +29,7 @@
     "@zeanium/http-server": "1.8.8",
     "bluebird": "3.7.2",
     "officegen": "0.6.5",
-    "open": "9.1.0",
+    "open": "8.4.2",
     "redis": "3.1.2",
     "snowflake-id": "1.1.0",
     "xlsx": "0.18.5"
