@@ -43,6 +43,7 @@ module.exports = zn.Class({
         loadRequestExcels: function (request, file_callback, sheet_callback){
             var _arrayData = [], _objectData = {}, _file_data = [], _sheets = null;
             var _files = request.uploadFiles({}, ()=>{ });
+            console.log(_files);
             for(var _file of _files){
                 var _return  = file_callback && file_callback(_file);
                 if(_return === false) {
