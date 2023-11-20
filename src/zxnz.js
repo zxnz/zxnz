@@ -100,6 +100,7 @@ var zxnz = {
     sql: zeanium_mysql.createSqlBuilder(),
     store: new Store(),
     file: require('./File'),
+    https: require('./Https'),
     excel: require('./Excel'),
     crypot: require('./Crypto'),
     snowflake: require('./Snowflake'),

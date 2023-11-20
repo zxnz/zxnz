@@ -43,7 +43,6 @@ module.exports = zn.Class({
         loadRequestExcels: function (request, file_callback, sheet_callback){
             var _arrayData = [], _objectData = {}, _file_data = [], _sheets = null;
             var _files = request.uploadFiles({}, ()=>{ });
-            console.log(_files);
             for(var _file of _files){
                 var _return  = file_callback && file_callback(_file);
                 if(_return === false) {
@@ -149,14 +148,37 @@ module.exports = zn.Class({
                     _headers.push(_header.label);
                 }
                 _sheet.data[0] = _headers;
-
+                var _text = '';
                 for(var _item of sheet.data){
                     var _row = [];
                     for(var _column of _columns){
-                        if(_column.data) {
-                            _row.push(_column.data[_item[_column.name]]||'');
-                        }else{
-                            _row.push((_item[_column.text]||'').format(_item)||_item[_column.name]||'');
+                        try {
+                            _text = '';
+                            if(_column.data) {
+                                _text = _column.data[_item[_column.name]] || '';
+                            }
+                            if(_column.text) {
+                                if(zn.is(_column.text, 'string')) {
+                                    _text = _item[_column.text];
+                                }else if(zn.is(_column.text, 'array')){
+                                    for(var key of _column.text) {
+                                        if(_item[key]){
+                                            _text = _item[key];
+                                            continue;
+                                        }
+                                    }
+                                }else if(zn.is(_column.text, 'function')){
+                                    _text = _column.text.call(null, _column, _item);
+                                }
+                            }
+                            if(!_text){
+                                _text = _item[_column.name];
+                            }
+                            _text = (_text||'').toString().trim() || '';
+                            _text = _text.format(_item);
+                            _row.push(_text);
+                        } catch (err) {
+                            zn.error('[ERROR] - [zxnz.excel.createExcelDownloadStreamer]: ', err);
                         }
                     }
                     _sheet.data.push(_row);
